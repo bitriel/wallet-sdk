@@ -37,7 +37,7 @@ import { sendTransaction } from "bitriel-react-sdk";
 
 const privateKey = "your-private-key-here";
 const recipientAddress = "recipient-address";
-const amount = 100; // Amount to transfer
+const amount = 1; // Amount to transfer
 
 sendTransaction(privateKey, recipientAddress, amount)
 	.then((hash) => {

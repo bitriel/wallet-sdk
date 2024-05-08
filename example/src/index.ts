@@ -1,5 +1,4 @@
-// import { initBitriel, sendTransaction } from "bitriel-react-sdk";
-import { initBitriel, sendTransaction } from "./../../src/index";
+import { initBitriel, sendTransaction } from "bitriel-react-sdk";
 
 const mnemonic = "your mnemonic";
 const receiver = "your receiver address on Selendra Network";
