@@ -18,8 +18,9 @@ To initialize Bitriel and retrieve account information such as address, balance,
 import { initBitriel } from "bitriel-react-sdk";
 
 const mnemonic = "your-mnemonic-here";
+const rpc_endpoint = "wss://rpc1.selendra.org";
 
-initBitriel(mnemonic)
+initBitriel({ mnemonic: mnemonic, rpc_endpoint: rpc_endpoint })
 	.then((result) => {
 		console.log("Bitriel initialized successfully:", result);
 	})
@@ -35,13 +36,19 @@ To send a transaction from one account to another:
 ```typescript
 import { sendTransaction } from "bitriel-react-sdk";
 
+const rpc_endpoint = "wss://rpc1.selendra.org";
 const privateKey = "your-private-key-here";
 const recipientAddress = "recipient-address";
 const amount = 1; // Amount to transfer
 
-sendTransaction(privateKey, recipientAddress, amount)
+sendTransaction({
+	rpc_endpoint: rpc_endpoint,
+	privateKey: privateKey!,
+	recipientAddress: receiver,
+	amount: amount,
+})
 	.then((hash) => {
-		console.log("Transaction sent successfully. Hash:", hash);
+		console.log("Transaction sent successfully. Hash:", hash.toString());
 	})
 	.catch((error) => {
 		console.error("Error sending transaction:", error);
