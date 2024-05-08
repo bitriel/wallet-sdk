@@ -5,7 +5,7 @@ import { encodeAddress, mnemonicToMiniSecret } from "@polkadot/util-crypto";
 import { formatBalance, u8aToHex } from "@polkadot/util";
 import { RPC_ENDPOINT, SEL_SS58_FORMAT } from "./constants";
 
-export async function initBitriel({ mnemonic }: { mnemonic: string }) {
+export async function initBitriel(mnemonic: string) {
 	try {
 		// Connect to the Polkadot network
 		const api = await connectToSelendra();
@@ -44,7 +44,7 @@ export async function sendTransaction(
 	privateKey: string,
 	recipientAddress: string,
 	amount: number
-): Promise<string> {
+) {
 	try {
 		const api = await connectToSelendra(); // Connect to Selendra network
 
@@ -52,15 +52,16 @@ export async function sendTransaction(
 
 		const parsedAmount = parseAmount(amount, api); // Parse amount
 
-		const hash = await sendTransfer(
-			api,
-			sender,
+		// Create a transfer transaction
+		const transfer = api.tx.balances.transfer(
 			recipientAddress,
 			parsedAmount
-		); // Sign and send transaction
+		);
 
-		console.log(`Transaction sent with hash: ${hash.toString()}`);
-		return hash.toString();
+		// Sign and send the transaction
+		const hash = await transfer.signAndSend(sender);
+
+		return { hash };
 	} catch (error) {
 		console.error("Error sending transaction:", error);
 		throw error;
@@ -90,21 +91,14 @@ async function fetchBalance(api: ApiPromise, address: string) {
 }
 
 function getSenderAccount(privateKey: string) {
-	const keyring = new Keyring({ type: "sr25519", ss58Format: 204 });
+	const keyring = new Keyring({
+		type: "sr25519",
+		ss58Format: SEL_SS58_FORMAT,
+	});
 	return keyring.addFromMnemonic(privateKey);
 }
 
 function parseAmount(amount: number, api: ApiPromise): bigint {
 	const chainDecimals = api.registry.chainDecimals[0];
 	return BigInt(amount * Math.pow(10, chainDecimals));
-}
-
-async function sendTransfer(
-	api: ApiPromise,
-	sender: any,
-	recipientAddress: string,
-	amount: bigint
-): Promise<any> {
-	const transfer = api.tx.balances.transfer(recipientAddress, amount);
-	return await transfer.signAndSend(sender);
 }

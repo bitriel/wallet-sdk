@@ -15,11 +15,11 @@ To use the Selendra SDK in your project, you can install it via npm:
 To initialize Bitriel and retrieve account information such as address, balance, and private key:
 
 ```typescript
-import { initBitriel } from "@selendra/sdk";
+import { initBitriel } from "bitriel-react-sdk";
 
 const mnemonic = "your-mnemonic-here";
 
-initBitriel({ mnemonic })
+initBitriel(mnemonic)
 	.then((result) => {
 		console.log("Bitriel initialized successfully:", result);
 	})
@@ -33,7 +33,7 @@ initBitriel({ mnemonic })
 To send a transaction from one account to another:
 
 ```typescript
-import { sendTransaction } from "@selendra/sdk";
+import { sendTransaction } from "bitriel-react-sdk";
 
 const privateKey = "your-private-key-here";
 const recipientAddress = "recipient-address";
