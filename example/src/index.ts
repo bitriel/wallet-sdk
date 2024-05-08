@@ -1,12 +1,13 @@
 import { initBitriel, sendTransaction } from "bitriel-react-sdk";
 
+const rpc_endpoint = "wss://rpc1.selendra.org";
 const mnemonic = "your mnemonic";
-const receiver = "your receiver address on Selendra Network";
+const receiver = "recipient address";
 const amount = 1;
 
 let privateKey;
 
-initBitriel(mnemonic)
+initBitriel({ mnemonic: mnemonic, rpc_endpoint: rpc_endpoint })
 	.then((result) => {
 		// Handle successful response
 		console.log("Bitriel initialized successfully:", result);
@@ -17,10 +18,15 @@ initBitriel(mnemonic)
 		console.error("Error initializing Bitriel:", error);
 	})
 	.finally(() => {
-		sendTransaction(privateKey!, receiver, amount)
+		sendTransaction({
+			rpc_endpoint: rpc_endpoint,
+			privateKey: privateKey!,
+			recipientAddress: receiver,
+			amount: amount,
+		})
 			.then((hash) => {
 				// Transaction successful, handle the transaction hash
-				console.log("Transaction hash:", hash);
+				console.log("Transaction hash:", hash.toString());
 			})
 			.catch((error) => {
 				// Transaction failed, handle the error
