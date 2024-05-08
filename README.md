@@ -54,3 +54,16 @@ sendTransaction({
 		console.error("Error sending transaction:", error);
 	});
 ```
+
+## Feature Development
+
+-   [x] Initialize Selendra Network
+-   [x] Initialize Selendra EVM
+-   [x] Initialize Multi-Chain Support
+-   [x] Send Transaction Selendra Network
+-   [x] Send Transaction Selendra EVM
+-   [x] Fetch Balance Selendra EVM Contract
+-   [ ] Send Transaction Selendra EVM Contract
+-   [ ] Send Transaction Multi-Chain Native EVM
+-   [ ] Send Transaction Multi-Chain EVM Contract
+-   [ ] Connect Smart Contract Selendra EVM Contract

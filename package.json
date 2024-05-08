@@ -1,6 +1,6 @@
 {
 	"name": "bitriel-react-sdk",
-	"version": "1.0.5",
+	"version": "1.0.7",
 	"description": "This is bitriel SDK for react",
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
@@ -24,6 +24,8 @@
 		"typescript": "^5.4.5"
 	},
 	"dependencies": {
-		"@polkadot/api": "^11.0.2"
+		"@covalenthq/client-sdk": "^1.0.2",
+		"@polkadot/api": "^11.0.2",
+		"ethers": "^6.12.1"
 	}
 }
