@@ -59,17 +59,46 @@ sendTransaction({
 
 To initialize Bitriel and retrieve account information such as address, balance, and private key with Native EVM chain:
 
+#### Create data list network
+
+```typescript
+export interface DataNetworkItem {
+	id: number;
+	networkName: string;
+	networkUrl?: string;
+	imageUrl: string;
+	networkChain?: Chain;
+	chainId?: number;
+}
+
+export const dataNetwork: DataNetworkItem[] = [
+	{
+		id: 1,
+		networkName: "Selendra EVM",
+		networkUrl: "https://rpc1.selendra.org",
+		imageUrl: "https://www.selendra.org/images/sel-logo-thin.png",
+		chainId: 1961,
+	},
+	{
+		id: 2,
+		networkName: "Ethereum",
+		networkUrl: "rpc-network of Ethereum",
+		networkChain: "eth-sepolia",
+		chainId: 11155111,
+	},
+
+	// Create more list as needed
+];
+```
+
 ```typescript
 import { initializeEvmApi } from "bitriel-react-sdk";
 
 const mnemonic = "your-mnemonic-here";
-const rpc_endpoint = "https://rpc1.selendra.org";
-const chainId = 1961;
 
 initializeEthersApi({
 	mnemonic: mnemonic,
-	rpc_endpoint: rpc_endpoint,
-	networkChainId: chainId,
+	dataNetwork: dataNetwork,
 })
 	.then((result) => {
 		console.log("Evm chain initialized successfully:", result);

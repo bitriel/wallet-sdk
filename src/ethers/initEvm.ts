@@ -1,18 +1,17 @@
 import { ethers, Wallet } from "ethers";
+import { NetworkItem } from "../types";
 
-export async function initializeEvmApi({
+export async function initializeEthersApi({
 	mnemonic,
-	rpc_endpoint,
-	networkChainId,
+	dataNetwork,
 }: {
 	mnemonic: string;
-	rpc_endpoint: string;
-	networkChainId: number;
+	dataNetwork: NetworkItem;
 }) {
 	try {
 		const provider = new ethers.JsonRpcProvider(
-			rpc_endpoint,
-			networkChainId
+			dataNetwork.networkUrl,
+			dataNetwork.chainId
 		);
 		const wallet = Wallet.fromPhrase(mnemonic).connect(provider);
 
