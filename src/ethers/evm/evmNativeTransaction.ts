@@ -1,37 +1,37 @@
 import { ethers } from "ethers";
 
-export async function selEvmNativeTransaction({
-	selendraRpc,
-	selendraChainId,
+export async function evmNativeTransaction({
+	rpc_endpoint,
+	networkChainId,
 	privateKey,
 	to,
 	amount,
+	decimal,
 }: {
-	selendraRpc: string;
-	selendraChainId: number;
+	rpc_endpoint: string;
+	networkChainId: number;
 	privateKey: string;
 	to: string;
 	amount: string;
+	decimal?: number;
 }) {
 	try {
 		// Initialize provider with default Selendra EVM settings
 		const provider = new ethers.JsonRpcProvider(
-			selendraRpc,
-			selendraChainId
+			rpc_endpoint,
+			networkChainId
 		);
 
 		// Initialize signer with provided private key
 		const signer = new ethers.Wallet(privateKey, provider);
 
-		const value = ethers.parseEther(amount);
+		const value = ethers.parseUnits(amount, decimal);
 
 		// Send transaction
 		const tx = await signer.sendTransaction({
 			to: to,
 			value: value,
 		});
-
-		console.log("Transaction:", tx);
 
 		// Return transaction data if successful
 		return tx;

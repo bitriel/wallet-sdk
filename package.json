@@ -1,6 +1,6 @@
 {
 	"name": "bitriel-react-sdk",
-	"version": "1.0.7",
+	"version": "1.0.9",
 	"description": "This is bitriel SDK for react",
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",

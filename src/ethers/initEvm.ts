@@ -1,17 +1,18 @@
 import { ethers, Wallet } from "ethers";
-import { NetworkItem } from "../types";
 
-export async function initializeEthersApi({
+export async function initializeEvmApi({
 	mnemonic,
-	dataNetwork,
+	rpc_endpoint,
+	networkChainId,
 }: {
 	mnemonic: string;
-	dataNetwork: NetworkItem;
+	rpc_endpoint: string;
+	networkChainId: number;
 }) {
 	try {
 		const provider = new ethers.JsonRpcProvider(
-			dataNetwork.networkUrl,
-			dataNetwork.chainId
+			rpc_endpoint,
+			networkChainId
 		);
 		const wallet = Wallet.fromPhrase(mnemonic).connect(provider);
 
@@ -26,7 +27,6 @@ export async function initializeEthersApi({
 			privateKey: wallet.privateKey,
 		};
 	} catch (error) {
-		console.error("Error initializing endpoint:", error);
 		throw error;
 	}
 }

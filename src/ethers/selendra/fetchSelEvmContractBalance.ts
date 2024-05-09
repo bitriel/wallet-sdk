@@ -1,17 +1,17 @@
 import { ethers } from "ethers";
 
 export async function fetchSelEvmBalance({
-	selendraRpc,
-	selendraChainId,
+	rpc_endpoint,
+	networkChainId,
 	contractAddress,
 	accountAddress,
 }: {
-	selendraRpc: string;
-	selendraChainId: number;
+	rpc_endpoint: string;
+	networkChainId: number;
 	contractAddress: string;
 	accountAddress: string;
 }): Promise<string> {
-	const provider = new ethers.JsonRpcProvider(selendraRpc, selendraChainId);
+	const provider = new ethers.JsonRpcProvider(rpc_endpoint, networkChainId);
 
 	const contract = new ethers.Contract(
 		contractAddress,
