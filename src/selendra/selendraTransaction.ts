@@ -4,7 +4,7 @@ import {
 	parseAmount,
 } from "./selendraHelper";
 
-export async function sendTransaction({
+export async function selendraTransaction({
 	rpc_endpoint,
 	privateKey,
 	recipientAddress,

@@ -6,7 +6,7 @@ import {
 	fetchBalance,
 } from "./selendraHelper";
 
-export async function initBitriel({
+export async function initSelendra({
 	rpc_endpoint,
 	mnemonic,
 }: {

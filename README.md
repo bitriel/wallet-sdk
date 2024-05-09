@@ -1,6 +1,6 @@
 # Bitriel SDK
 
-A Typescript SDK for interacting with the Selendra blockchain network based on Bitriel Wallet.
+A Typescript SDK for interacting with the Selendra blockchain network and Multi-Chain EVM based on Bitriel Wallet.
 
 ## Installation
 
@@ -10,17 +10,17 @@ To use the Selendra SDK in your project, you can install it via npm:
 
 ## Usage
 
-### Initialize Bitriel
+### Initialize Selendra
 
-To initialize Bitriel and retrieve account information such as address, balance, and private key:
+To initialize Selendra and retrieve account information such as address, balance, and private key:
 
 ```typescript
-import { initBitriel } from "bitriel-react-sdk";
+import { initSelendra } from "bitriel-react-sdk";
 
 const mnemonic = "your-mnemonic-here";
 const rpc_endpoint = "wss://rpc1.selendra.org";
 
-initBitriel({ mnemonic: mnemonic, rpc_endpoint: rpc_endpoint })
+initSelendra({ mnemonic: mnemonic, rpc_endpoint: rpc_endpoint })
 	.then((result) => {
 		console.log("Selendar network initialized successfully:", result);
 	})
@@ -34,14 +34,14 @@ initBitriel({ mnemonic: mnemonic, rpc_endpoint: rpc_endpoint })
 To send a transaction from one account to another on Selendra Network:
 
 ```typescript
-import { sendTransaction } from "bitriel-react-sdk";
+import { selendraTransaction } from "bitriel-react-sdk";
 
 const rpc_endpoint = "wss://rpc1.selendra.org";
 const privateKey = "your-private-key-here";
 const recipientAddress = "recipient-address";
 const amount = 1; // Amount to transfer
 
-sendTransaction({
+selendraTransaction({
 	rpc_endpoint: rpc_endpoint,
 	privateKey: privateKey,
 	recipientAddress: receiver,
@@ -92,11 +92,11 @@ export const dataNetwork: DataNetworkItem[] = [
 ```
 
 ```typescript
-import { initializeEvmApi } from "bitriel-react-sdk";
+import { initEvm } from "bitriel-react-sdk";
 
 const mnemonic = "your-mnemonic-here";
 
-initializeEvmApi({
+initEvm({
 	mnemonic: mnemonic,
 	dataNetwork: dataNetwork,
 })
@@ -155,7 +155,7 @@ const recipientAddress = "recipient-address";
 const amount = 1; // Amount to transfer
 const decimalToken = 18;
 
-initializeEthersApi({
+evmNativeTransaction({
 	rpc_endpoint: rpc_endpoint,
 	networkChainId: chainId,
 	privateKey: privateKey,
@@ -164,10 +164,42 @@ initializeEthersApi({
 	decimal: decimalToken,
 })
 	.then((tx) => {
-		console.log("Transaction sent successfully.", tx.hash);
+		console.log("Transaction Native EVM sent successfully.", tx.hash);
 	})
 	.catch((error) => {
-		console.error("Error initializing Evm:", error);
+		console.error("Error Transaction Native Evm:", error);
+	});
+```
+
+### Send Transaction Selendra EVM & Multi-Chain Native Contract Token
+
+To send a transaction from one account to another on Selendra EVM & Multi-Chain Support:
+
+```typescript
+import { evmContractTransaction } from "bitriel-react-sdk";
+
+const rpc_endpoint = "https://rpc1.selendra.org";
+const chainId = 1961;
+const privateKey = "your private key";
+const contractAddress = "usdt contract address";
+const recipientAddress = "recipient-address";
+const amount = 1; // Amount to transfer
+const decimalToken = 18;
+
+evmContractTransaction({
+	rpc_endpoint: rpc_endpoint,
+	networkChainId: chainId,
+	privateKey: privateKey,
+	contractAddress: contractAddress,
+	to: recipientAddress,
+	amount: amount,
+	decimal: decimalToken,
+})
+	.then((tx) => {
+		console.log("Transaction Native EVM sent successfully.", tx.hash);
+	})
+	.catch((error) => {
+		console.error("Error Transaction Native Evm:", error);
 	});
 ```
 
@@ -178,5 +210,5 @@ initializeEthersApi({
 -   [x] Fetch Balance Selendra EVM Contract
 -   [x] Initialize Selendra EVM & Multi-Chain Support
 -   [x] Send Transaction Selendra EVM & Multi-Chain Native EVM
--   [ ] Send Transaction Selendra EVM & Multi-Chain Native Contract Token
+-   [x] Send Transaction Selendra EVM & Multi-Chain Native Contract Token
 -   [ ] Add Smart Contract Selendra EVM Contract
