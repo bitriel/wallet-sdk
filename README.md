@@ -96,7 +96,7 @@ import { initializeEvmApi } from "bitriel-react-sdk";
 
 const mnemonic = "your-mnemonic-here";
 
-initializeEthersApi({
+initializeEvmApi({
 	mnemonic: mnemonic,
 	dataNetwork: dataNetwork,
 })

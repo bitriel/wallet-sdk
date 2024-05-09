@@ -1,7 +1,7 @@
 import { ethers, Wallet } from "ethers";
 import { NetworkItem } from "../types";
 
-export async function initializeEthersApi({
+export async function initializeEvmApi({
 	mnemonic,
 	dataNetwork,
 }: {
