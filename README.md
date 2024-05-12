@@ -10,6 +10,18 @@ To use the Selendra SDK in your project, you can install it via npm:
 
 ## Usage
 
+### Create Mnemonic
+
+```typescript
+import { createMnemonic } from "bitriel-react-sdk";
+
+const generateMnemonic = () => {
+	const mnemonic = createMnemonic();
+
+	console.log("mnemonic", mnemonic);
+};
+```
+
 ### Initialize Selendra
 
 To initialize Selendra and retrieve account information such as address, balance, and private key:
@@ -205,10 +217,10 @@ evmContractTransaction({
 
 ## Feature Development
 
+-   [x] Generate Mnemonic Phrase
 -   [x] Initialize Selendra Network
 -   [x] Send Transaction Selendra Network
 -   [x] Fetch Balance Selendra EVM Contract
 -   [x] Initialize Selendra EVM & Multi-Chain Support
 -   [x] Send Transaction Selendra EVM & Multi-Chain Native EVM
 -   [x] Send Transaction Selendra EVM & Multi-Chain Native Contract Token
--   [ ] Add Smart Contract Selendra EVM Contract

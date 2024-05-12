@@ -1,3 +1,5 @@
+export * from "./createMnemonic";
+
 export * from "./selendra/initSelendra";
 export * from "./selendra/selendraTransaction";
 
