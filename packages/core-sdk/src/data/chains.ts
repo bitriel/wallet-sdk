@@ -1,0 +1,20 @@
+export const chainList = [
+	{
+		name: "Selendra Mainnet",
+		url: "https://rpc0.selendra.org",
+		logo: "https://www.selendra.org/logo/sel-logo-blue-notext.png",
+		symbol: "SEL",
+	},
+	{
+		name: "Selendra Testnet",
+		url: "https://rpc0-testnet.selendra.org",
+		logo: "https://www.selendra.org/logo/sel-logo-blue-notext.png",
+		symbol: "tSEL",
+	},
+	{
+		name: "Ethereum Mainnet",
+		url: "https://cloudflare-eth.com",
+		logo: "https://icons.llamao.fi/icons/chains/rsz_ethereum.jpg",
+		symbol: "ETH",
+	},
+];

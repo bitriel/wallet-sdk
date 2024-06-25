@@ -2,6 +2,6 @@
 	"name": "wallet-sdk",
 	"version": "2.0.0-alpha",
 	"workspaces": [
-		"packages/core"
+		"packages/*"
 	]
 }
