@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-types */
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { WalletSDK, ContractInfo, chainList } from "core-sdk";
 // import { AddressLike } from "ethers";
 // import { JsonRpcProvider } from "ethers";
@@ -11,6 +12,8 @@ export const WalletContext = createContext<iWalletContext>({
 	account: null,
 	chain: null,
 	contractsByChain: [],
+	removeContract: (_address: string) => {},
+	editContract: (_address: string, _update: ContractInfo) => {},
 });
 
 export const AccountProvider: React.FC<Props> = ({ children }) => {
@@ -66,10 +69,24 @@ export const AccountProvider: React.FC<Props> = ({ children }) => {
 		setContracts((prev) => prev.filter((c) => c.address !== address));
 	};
 
-	useEffect(() => {
-		console.log(account?.wallet.address);
-		console.log(account?.wallet.privateKey);
-	}, [account]);
+	const editContract = (address: string, update: ContractInfo) => {
+		setContracts((prev) =>
+			prev.map((c) => {
+				if (c.address === address) {
+					return {
+						...c,
+						...update,
+					};
+				}
+				return c;
+			})
+		);
+	};
+
+	// useEffect(() => {
+	// 	console.log(account?.wallet.address);
+	// 	console.log(account?.wallet.privateKey);
+	// }, [account]);
 
 	return (
 		<WalletContext.Provider
@@ -84,6 +101,7 @@ export const AccountProvider: React.FC<Props> = ({ children }) => {
 				chain,
 				chainInfo,
 				contractsByChain,
+				editContract,
 			}}
 		>
 			{children}
@@ -116,7 +134,8 @@ export interface iWalletContext {
 	switchWallet?: Function;
 	loadContract?: Function;
 	addContract?: Function;
-	removeContract?: Function;
+	removeContract: (address: string) => void;
+	editContract: (address: string, update: ContractInfo) => void;
 	chains?: Chain[];
 	chain: string | null;
 	chainInfo?: Chain;

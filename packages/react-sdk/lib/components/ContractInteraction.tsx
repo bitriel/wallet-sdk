@@ -25,56 +25,26 @@ const ContractInteraction = ({
 
 	return (
 		<div>
-			<h2 className="my-4 font-medium divider divider-start">Read</h2>
-			<div className="flex flex-col gap-8">
+			<h2 className="my-8 text-xl font-bold divider divider-start">READ</h2>
+			<div className="flex flex-col divide-y divide-base-content/30">
 				{parsed
 					.filter(
 						(method: any) =>
 							method.type === "function" && method.stateMutability === "view"
 					)
 					.map((method: any, index: number) => (
-						// <div key={index} className="flex flex-col w-full gap-2 ">
-						// 	<h3 className="text-sm capitalize">{method.name}</h3>
-
-						// 	{method.inputs.map((input: any, i: number) => (
-						// 		<div key={i} className="w-full">
-						// 			<input
-						// 				type="text"
-						// 				className="block w-full border-2 input input-bordered"
-						// 				placeholder={`${input.name} (${input.type})`}
-						// 				name={`${method.name}-${input.name}`}
-						// 			/>
-						// 		</div>
-						// 	))}
-						// 	<button className={cn("btn btn-block btn-info ")}>Call</button>
-						// </div>
 						<ContractReadLine key={index} method={method} contract={contract} />
 					))}
 			</div>
 
-			<h2 className="mt-8 mb-4 font-medium divider divider-start">Write</h2>
-			<div className="flex flex-col gap-8 mb-4">
+			<h2 className="my-8 text-xl font-bold divider divider-start">WRITE</h2>
+			<div className="flex flex-col divide-y divide-base-content/30">
 				{parsed
 					?.filter(
 						(method: any) =>
 							method?.type === "function" && method?.stateMutability !== "view"
 					)
 					.map((method: any, index: number) => (
-						// <div key={index} className="flex flex-col w-full gap-2">
-						// 	<h3 className="text-sm capitalize">{method.name}</h3>
-
-						// 	{method.inputs.map((input: any, i: number) => (
-						// 		<div key={i} className="w-full">
-						// 			<input
-						// 				type="text"
-						// 				className="block w-full border-2 input input-bordered"
-						// 				placeholder={`${input.name} (${input.type})`}
-						// 				name={`${method.name}-${input.name}`}
-						// 			/>
-						// 		</div>
-						// 	))}
-						// 	<button className={cn("btn btn-block btn-warning ")}>Send</button>
-						// </div>
 						<ContractReadLine key={index} method={method} contract={contract} />
 					))}
 			</div>

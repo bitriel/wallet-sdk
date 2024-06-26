@@ -76,7 +76,7 @@ export const ResizeProvider = ({ children }: { children: ReactNode }) => {
 			>
 				<div
 					onMouseDown={handleMouseDown}
-					className="absolute left-0 flex w-2 h-12 text-center rounded-r-lg bg-neutral/25 hover:bg-neutral/40 top-1/2 hover:cursor-col-resize place-items-center"
+					className="absolute left-0 flex w-2 h-12 text-center rounded-r-lg bg-primary/20 hover:bg-primary/40 top-1/2 hover:cursor-col-resize place-items-center"
 				>
 					|
 				</div>

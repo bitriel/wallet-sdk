@@ -23,12 +23,14 @@ export default function ContractListItem({
 	}, [account, contract]);
 	return (
 		<div
-			className="flex gap-2 p-2 cursor-pointer bg-base-300 rounded-xl place-items-center"
+			className="flex gap-2 py-4 cursor-pointer place-items-center"
 			onClick={() => navigate(`/contracts/${info.address}`)}
 		>
 			<div className="avatar placeholder">
 				<div className="w-12 rounded-full bg-neutral text-neutral-content">
-					<span>{info.symbol}</span>
+					<span>
+						{info.symbol.length > 3 ? info.symbol.slice(0, 3) : info.symbol}
+					</span>
 				</div>
 			</div>
 			<p className="flex-grow text-lg font-bold title">{info.name}</p>{" "}

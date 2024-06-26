@@ -17,18 +17,20 @@ export default function Home() {
 	}, [account, balance]);
 
 	return (
-		<main className="flex-grow p-4 overflow-auto no-bar">
+		<main className="flex flex-col flex-grow gap-4 p-4 overflow-auto no-bar">
 			<h2 className="my-6 text-5xl text-center title">
 				{prettyBalance(balance)} {chainInfo && chainInfo.symbol}
 			</h2>
 
-			{contractsByChain.map((contract) => (
-				<ContractListItem
-					key={contract.address}
-					contract={account!.contracts.get(contract.symbol)!}
-					info={contract}
-				/>
-			))}
+			<div className="flex flex-col divide-y divide-base-content/30">
+				{contractsByChain.map((contract) => (
+					<ContractListItem
+						key={contract.address}
+						contract={account!.contracts.get(contract.symbol)!}
+						info={contract}
+					/>
+				))}
+			</div>
 		</main>
 	);
 }

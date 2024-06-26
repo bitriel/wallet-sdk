@@ -3,6 +3,7 @@ import Home from "./home";
 import Contracts from "./contracts";
 import ContractsAdd from "./contractsAdd";
 import ContractId from "./contractId";
+import ContractsEdit from "./contractsEdit";
 
 export default function Pages() {
 	return (
@@ -11,6 +12,10 @@ export default function Pages() {
 			<Route path="/contracts" element={<Contracts />} />
 			<Route path="/contracts/add" element={<ContractsAdd />} />
 			<Route path="/contracts/:id" element={<ContractId />} />
+			<Route
+				path="/contracts/edit/:contractAddress"
+				element={<ContractsEdit />}
+			/>
 		</Routes>
 	);
 }

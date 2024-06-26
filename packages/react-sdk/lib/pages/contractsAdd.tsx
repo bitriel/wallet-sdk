@@ -5,6 +5,7 @@ import { cn } from "../utils/cn";
 import ABIUploader from "../components/ABIUploader";
 import { ContractInfo } from "core-sdk";
 import { GENERIC_ABI } from "core-sdk";
+import { useNavigate } from "react-router-dom";
 
 // import ContractInteraction from "../components/ContractInteraction";
 
@@ -26,10 +27,11 @@ const ContractTypes = ["ERC20", "ERC721", "ERC1155", "CUSTOM"] as const;
 type ContractType = (typeof ContractTypes)[number];
 
 export default function ContractsAdd() {
+	const navigate = useNavigate();
 	const [address, setAddress] = useState("");
 	const [contractExist, setContractExist] =
 		useState<ContractStatus>("Unchecked");
-	const { account, addContract, chain } = useAccount();
+	const { account, addContract, chain, contractsByChain } = useAccount();
 
 	const [decimals, setDecimals] = useState("Unknown");
 	const [name, setName] = useState("Unknown");
@@ -41,6 +43,10 @@ export default function ContractsAdd() {
 	const isValidAddress = useMemo(() => {
 		return isAddress(address);
 	}, [address]);
+
+	const contractAlreadyExist = useMemo(() => {
+		return contractsByChain.some((c) => c.address === address);
+	}, [address, contractsByChain]);
 
 	useEffect(() => {
 		if (isValidAddress) {
@@ -100,7 +106,7 @@ export default function ContractsAdd() {
 					{symbol === "Unknown" ? null : (
 						<div>
 							<div className="label">
-								<span className="label-text">Token Symbol</span>
+								<span className="label-text">Contract Symbol</span>
 							</div>
 							<input
 								className={cn("w-full input input-bordered")}
@@ -113,7 +119,7 @@ export default function ContractsAdd() {
 					{decimals === "Unknowm" ? null : (
 						<div>
 							<div className="label">
-								<span className="label-text">Token Decimals</span>
+								<span className="label-text">Contract Decimals</span>
 							</div>
 							<input
 								className={cn("w-full input input-bordered")}
@@ -125,7 +131,7 @@ export default function ContractsAdd() {
 
 					<div>
 						<div className="label">
-							<span className="label-text">Token type</span>
+							<span className="label-text">Contract type</span>
 						</div>
 						<select
 							className="w-full select select-bordered"
@@ -167,9 +173,13 @@ export default function ContractsAdd() {
 									decimal: parseInt(decimals),
 								};
 								addContract!(contract);
+								navigate(`/contracts/${address}`);
 							}}
+							disabled={contractAlreadyExist}
 						>
-							Add Contract
+							{contractAlreadyExist
+								? "Your already add this contract"
+								: "Add Contract"}
 						</button>
 					) : null}
 				</Fragment>
