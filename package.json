@@ -1,7 +1,37 @@
 {
 	"name": "wallet-sdk",
-	"version": "2.0.0-alpha",
-	"workspaces": [
-		"packages/*"
-	]
+	"version": "1.0.14",
+	"description": "This is bitriel SDK for react",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"homepage": "http://selendra.org",
+	"repository": {
+		"url": "https://github.com/bitriel/bitriel-react-sdk"
+	},
+	"scripts": {
+		"build": "tsup",
+		"test": "ts-node test/index.ts"
+	},
+	"keywords": [
+		"bitriel",
+		"selendra",
+		"sdk"
+	],
+	"author": "samallen",
+	"license": "MIT",
+	"devDependencies": {
+		"ts-node": "^10.9.2",
+		"tsup": "^8.0.2",
+		"typescript": "^5.4.5"
+	},
+	"dependencies": {
+		"@covalenthq/client-sdk": "^1.0.2",
+		"ethers": "^6.12.1"
+	},
+	"exports": {
+		"types": "./dist/index.d.ts",
+		"import": "./dist/index.mjs",
+		"require": "./dist/index.js"
+	}
 }
