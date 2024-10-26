@@ -20,7 +20,7 @@ Here's an example of how to use the WalletSDK to interact with the Ethereum bloc
 import { WalletSDK } from "./path/to/walletsdk";
 
 const mnemonic = process.env.mnemonic ?? "your mnemonic phrase";
-const chain = "https://rpc0-testnet.selendra.org";
+const chain = "https://rpc-testnet.selendra.org";
 const contracts = [
 	{
 		abi: yourContractAbi,

@@ -10,20 +10,20 @@ var prettyBalance = (amount) => {
 // src/chains/index.ts
 var chains = {
   "selendra-mainnet": "https://rpc.selendra.org",
-  "selendra-testnet": "https://rpc0-testnet.selendra.org"
+  "selendra-testnet": "https://rpc-testnet.selendra.org"
 };
 
 // src/data/chains.ts
 var chainList = [
   {
     name: "Selendra Mainnet",
-    url: "https://rpc0.selendra.org",
+    url: "https://rpc.selendra.org",
     logo: "https://www.selendra.org/logo/sel-logo-blue-notext.png",
     symbol: "SEL"
   },
   {
     name: "Selendra Testnet",
-    url: "https://rpc0-testnet.selendra.org",
+    url: "https://rpc-testnet.selendra.org",
     logo: "https://www.selendra.org/logo/sel-logo-blue-notext.png",
     symbol: "tSEL"
   },
