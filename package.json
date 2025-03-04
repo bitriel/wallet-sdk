@@ -7,7 +7,7 @@
     "types": "./dist/index.d.ts",
     "homepage": "http://selendra.org",
     "repository": {
-        "url": "https://github.com/bitriel/wallet-sdk"
+        "url": "git+https://github.com/bitriel/wallet-sdk.git"
     },
     "scripts": {
         "build": "tsup",
