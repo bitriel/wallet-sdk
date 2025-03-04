@@ -40,6 +40,22 @@ declare const WalletSDK: (mnemonic: string, chain: string, contracts?: ContractI
 declare const createMnemonic: () => string;
 declare const Wallet: (mnemonic: string) => ethers$1.HDNodeWallet;
 
+declare const createMnemonicSelendra: () => string;
+declare function initSelendra({ rpc_endpoint, mnemonic, }: {
+    rpc_endpoint: string;
+    mnemonic: string;
+}): Promise<{
+    address: string;
+    balanceSEL: string;
+    privateKeyHex: string;
+}>;
+declare function selendraTransaction({ rpc_endpoint, privateKey, recipientAddress, amount, }: {
+    rpc_endpoint: string;
+    privateKey: string;
+    recipientAddress: string;
+    amount: number;
+}): Promise<string>;
+
 declare function shortenEthAddress(address: string): string;
 
-export { type ContractInfo, GENERIC_ABI, SEL, Wallet, WalletSDK, chainList, chains, createMnemonic, prettyBalance, shortenEthAddress };
+export { type ContractInfo, GENERIC_ABI, SEL, Wallet, WalletSDK, chainList, chains, createMnemonic, createMnemonicSelendra, initSelendra, prettyBalance, selendraTransaction, shortenEthAddress };

@@ -884,6 +884,139 @@ var WalletSDK = (mnemonic, chain, contracts = []) => {
   };
 };
 
+// src/wallet/selendra.ts
+import {
+  cryptoWaitReady,
+  encodeAddress,
+  mnemonicGenerate
+} from "@polkadot/util-crypto";
+import { formatBalance, u8aToHex } from "@polkadot/util";
+import { Keyring as Keyring2 } from "@polkadot/keyring";
+
+// src/helper/selendraHelper.ts
+import "@polkadot/api-augment";
+import { ApiPromise, WsProvider, Keyring } from "@polkadot/api";
+import { mnemonicToMiniSecret } from "@polkadot/util-crypto";
+import { BN } from "@polkadot/util";
+async function connectToSelendra(rpc_endpoint) {
+  const wsProvider = new WsProvider(rpc_endpoint);
+  const api = new ApiPromise({ provider: wsProvider });
+  await api.isReady;
+  return api;
+}
+function createKeyPair(mnemonic) {
+  const keyring = new Keyring({
+    type: "sr25519",
+    ss58Format: 42
+    // Changed from 204 to 42
+  });
+  const pair = keyring.createFromUri(mnemonic);
+  const miniSecret = mnemonicToMiniSecret(mnemonic);
+  return { pair, miniSecret };
+}
+async function fetchBalance(api, address) {
+  const accountInfo = await api.query.system.account(
+    address
+  );
+  return accountInfo.data.free;
+}
+function parseAmount(amount, decimals = 18) {
+  return new BN(amount).mul(new BN(10).pow(new BN(decimals)));
+}
+function handleTransactionError(api, dispatchError, reject) {
+  if (dispatchError.isModule) {
+    const decoded = api.registry.findMetaError(dispatchError.asModule);
+    const { docs, name, section } = decoded;
+    reject(new Error(`${section}.${name}: ${docs.join(" ")}`));
+  } else {
+    reject(new Error(dispatchError.toString()));
+  }
+}
+
+// src/wallet/selendra.ts
+var createMnemonicSelendra = () => {
+  try {
+    return mnemonicGenerate();
+  } catch (error) {
+    console.error("Error creating mnemonic", error);
+    throw error;
+  }
+};
+async function initSelendra({
+  rpc_endpoint,
+  mnemonic
+}) {
+  try {
+    await cryptoWaitReady();
+    const api = await connectToSelendra(rpc_endpoint);
+    const { pair, miniSecret } = createKeyPair(mnemonic);
+    const address = encodeAddress(pair.publicKey, 42);
+    const balance2 = await fetchBalance(api, address);
+    formatBalance.setDefaults({ unit: "SEL" });
+    const balanceSEL = formatBalance(balance2, {
+      decimals: 18,
+      forceUnit: "-"
+    });
+    const privateKeyHex = u8aToHex(miniSecret);
+    return {
+      address,
+      balanceSEL,
+      privateKeyHex
+    };
+  } catch (error) {
+    console.error("Error initializing Selendra wallet:", error);
+    throw error;
+  }
+}
+async function selendraTransaction({
+  rpc_endpoint,
+  privateKey,
+  recipientAddress,
+  amount
+}) {
+  try {
+    await cryptoWaitReady();
+    const api = await connectToSelendra(rpc_endpoint);
+    const keyring = new Keyring2({ type: "sr25519" });
+    const sender = keyring.addFromUri(privateKey);
+    const parsedAmount = parseAmount(amount);
+    const transfer2 = api.tx.balances.transferKeepAlive(
+      recipientAddress,
+      parsedAmount
+    );
+    return new Promise((resolve, reject) => {
+      transfer2.signAndSend(
+        sender,
+        { nonce: -1 },
+        // Allow automatic nonce handling
+        ({ status, dispatchError }) => {
+          if (dispatchError) {
+            return handleTransactionError(
+              api,
+              dispatchError,
+              reject
+            );
+          }
+          if (status.isInBlock) {
+            console.log(
+              `Transaction included in block: ${status.asInBlock}`
+            );
+            resolve(status.asInBlock.toString());
+          } else if (status.isFinalized) {
+            console.log(
+              `Transaction finalized in block: ${status.asFinalized}`
+            );
+            resolve(status.asFinalized.toString());
+          }
+        }
+      );
+    });
+  } catch (error) {
+    console.error("Error sending Selendra transaction:", error);
+    throw error;
+  }
+}
+
 // src/address.ts
 function shortenEthAddress(address) {
   if (address.length !== 42) {
@@ -899,6 +1032,9 @@ export {
   chainList,
   chains,
   createMnemonic,
+  createMnemonicSelendra,
+  initSelendra,
   prettyBalance,
+  selendraTransaction,
   shortenEthAddress
 };
