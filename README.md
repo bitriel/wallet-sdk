@@ -103,6 +103,6 @@ selendraWalletOperations();
 
 ## **Additional Resources**
 
--   [Selendra Documentation](https://docs.selendra.org)
+-   [Selendra Documentation](https://www.selendra.org/documents)
 -   [Blockchain SDK GitHub](https://github.com/bitriel/wallet-sdk)
 -   Support: allencode.dev@icloud.com
