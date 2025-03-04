@@ -4,7 +4,7 @@
 
 Create a web3-based loyalty program linked to normal web2 users' authentication, such as email, OAuth, or JWT.
 
-You can use the [Bitriel SDK](https://github.com/bitriel/bitriel-react-sdk) to generate unique addresses and map them to authenticated users on your web app. This will expedite wallet creation and ensure interoperability with future tokens and addresses on the Selendra Network and other EVM-based chains.
+You can use the [Bitriel SDK](https://github.com/bitriel/wallet-sdk) to generate unique addresses and map them to authenticated users on your web app. This will expedite wallet creation and ensure interoperability with future tokens and addresses on the Selendra Network and other EVM-based chains.
 
 Bitriel is a non-custodial wallet, but if you use Bitriel to generate addresses for your users, you are essentially holding custody for them. Therefore, we recommend encrypting the seed phrase for each wallet address generated and linking it to the user's authenticated account.
 
@@ -22,6 +22,6 @@ Ideally, we should airdrop 1-2 SEL tokens to authenticated users so they can per
 
 This can be achieved by transferring SEL tokens to authenticated addresses from a master address. This function can also be included in the smart contract.
 
-Your organization can request SEL token for each user. 
+Your organization can request SEL token for each user.
 
 If you have any question, please reach out to the team directly or via Selendra Community above.
