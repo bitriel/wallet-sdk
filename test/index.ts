@@ -6,8 +6,7 @@ import { chains } from "../src/chains";
 import { ethers, parseUnits } from "ethers";
 
 async function main() {
-    let mnemonic =
-        "firm verify grab high canal choice embark bitter cheese cancel bike cave";
+    let mnemonic = "mnemonic";
     console.log(mnemonic);
 
     try {
