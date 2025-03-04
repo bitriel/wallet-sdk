@@ -1,32 +1,58 @@
 import { SEL } from "../src/amount";
+import { initSelendra, selendraTransaction } from "../src/wallet/selendra";
 import { WalletSDK } from "../src";
 import { createMnemonic } from "../src/wallet/wallet";
 import { chains } from "../src/chains";
 import { ethers, parseUnits } from "ethers";
 
 async function main() {
-	let mnemonic =
-		"medal document little mosquito fiber metal toast vault nose dog minor acid laugh verify scan solve saddle talk rich cargo episode income depth vendor";
-	console.log(mnemonic);
+    let mnemonic =
+        "firm verify grab high canal choice embark bitter cheese cancel bike cave";
+    console.log(mnemonic);
 
-	let sdk = WalletSDK(mnemonic, chains["selendra-testnet"]);
+    try {
+        // Initialize Selendra wallet
+        let sdk = await initSelendra({
+            rpc_endpoint: "wss://rpc.selendra.org",
+            mnemonic,
+        });
+        console.log("Wallet Initialized:", {
+            address: sdk.address,
+            balance: sdk.balanceSEL,
+        });
 
-	console.log(
-		"Balance before transfer",
-		parseFloat(ethers.formatEther(await sdk.balance())).toFixed(4)
-	);
+        // Recipient address (ensure this is a valid Selendra address)
+        const recipientAddress =
+            "5EkFVKkrvyVhhCWXs6sfri22zXkP5BgenDEHyuL9vaHt78XW";
 
-	let rec = await sdk.transfer(
-		"0xa5915AAAF9ABCE06764eBa224A3A3F208fCD91f5",
-		SEL(0.1)
-	);
+        // Perform transaction
+        const transactionAmount = 1; // SEL amount
+        const hash = await selendraTransaction({
+            rpc_endpoint: "wss://rpc.selendra.org",
+            privateKey: sdk.privateKeyHex,
+            recipientAddress,
+            amount: transactionAmount,
+        });
 
-	console.log("Transaction hash", rec?.hash);
+        console.log("Transaction Details:", {
+            hash,
+            amount: transactionAmount,
+            recipient: recipientAddress,
+        });
 
-	console.log(
-		"Balance after transfer",
-		parseFloat(ethers.formatEther(await sdk.balance())).toFixed(4)
-	);
+        // Optional: Fetch and log updated balance
+        // Note: You might want to create a separate function to fetch current balance
+        // as the balance in the SDK might not immediately reflect the recent transaction
+    } catch (error) {
+        console.error("Selendra Transaction Error:", error);
+
+        // More detailed error logging
+        if (error instanceof Error) {
+            console.error("Error Name:", error.name);
+            console.error("Error Message:", error.message);
+            console.error("Error Stack:", error.stack);
+        }
+    }
 }
 
-main();
+main().catch(console.error);

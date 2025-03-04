@@ -1,37 +1,43 @@
 {
-	"name": "wallet-sdk",
-	"version": "1.0.15",
-	"description": "This is bitriel SDK for react",
-	"main": "./dist/index.js",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.ts",
-	"homepage": "http://selendra.org",
-	"repository": {
-		"url": "https://github.com/bitriel/bitriel-react-sdk"
-	},
-	"scripts": {
-		"build": "tsup",
-		"test": "ts-node test/index.ts"
-	},
-	"keywords": [
-		"bitriel",
-		"selendra",
-		"sdk"
-	],
-	"author": "samallen",
-	"license": "MIT",
-	"devDependencies": {
-		"ts-node": "^10.9.2",
-		"tsup": "^8.0.2",
-		"typescript": "^5.4.5"
-	},
-	"dependencies": {
-		"@covalenthq/client-sdk": "^1.0.2",
-		"ethers": "^6.12.1"
-	},
-	"exports": {
-		"types": "./dist/index.d.ts",
-		"import": "./dist/index.mjs",
-		"require": "./dist/index.js"
-	}
+    "name": "bitriel-wallet-sdk",
+    "version": "1.1.0",
+    "description": "This is bitriel Wallet SDK",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "homepage": "http://selendra.org",
+    "repository": {
+        "url": "https://github.com/bitriel/wallet-sdk"
+    },
+    "scripts": {
+        "build": "tsup",
+        "test": "ts-node test/index.ts"
+    },
+    "keywords": [
+        "bitriel",
+        "selendra",
+        "sdk"
+    ],
+    "author": "samallen",
+    "license": "MIT",
+    "devDependencies": {
+        "ts-node": "^10.9.2",
+        "tsup": "^8.0.2",
+        "typescript": "^5.4.5"
+    },
+    "dependencies": {
+        "@covalenthq/client-sdk": "^1.0.2",
+        "@polkadot/api": "^15.7.2",
+        "@polkadot/keyring": "^13.4.3",
+        "@polkadot/types": "^15.7.2",
+        "@polkadot/util": "^13.4.3",
+        "@polkadot/util-crypto": "^13.4.3",
+        "ethers": "^6.12.1"
+    },
+    "exports": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js"
+    },
+    "packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"
 }
