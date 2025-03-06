@@ -1,108 +1,117 @@
-# **WalletSDK Library**
+# Multi-Chain Wallet SDK
 
-## **Overview**
+A TypeScript SDK for interacting with both Polkadot and Ethereum EVM chains, providing a unified interface for wallet operations, token management, and transaction handling.
 
-The WalletSDK library provides a streamlined interface for interacting with blockchain networks, supporting both Ethereum and Selendra ecosystems.
+## Features
 
-## **Installation**
+-   Support for both Polkadot and Ethereum EVM chains
+-   Unified interface for wallet operations
+-   Token management for ERC-20 tokens
+-   Account management and transaction signing
+-   Balance queries for native and token balances
+-   Easy network and chain configuration
 
-To use the WalletSDK library, install the necessary dependencies:
+## Installation
 
-```sh
-npm install @bitriel/wallet-sdk
+```bash
+npm install bitriel-wallet-sdk
+# or
+yarn add bitriel-wallet-sdk
+# or
+pnpm add bitriel-wallet-sdk
 ```
 
-## **Ethereum Example Usage**
-
-Here's an example of how to use the WalletSDK to interact with the Ethereum blockchain:
-
-```js
-import { WalletSDK } from "./path/to/walletsdk";
-const mnemonic = process.env.mnemonic ?? "your mnemonic phrase";
-const chain = "https://rpc-testnet.selendra.org";
-const contracts = [
-    {
-        abi: yourContractAbi,
-        address: "0xYourContractAddress",
-        name: "YourContractName",
-        symbol: "YCN",
-        type: "ERC20",
-        chain: "mainnet",
-    },
-];
-const sdk = WalletSDK(mnemonic, chain, contracts);
-// Access the provider, wallet, and contracts
-const { provider, wallet, contracts: sdkContracts } = sdk;
-// Interact with a contract
-const yourContract = sdkContracts.get("YCN");
-yourContract.balanceOf("0xYourContractAddress");
-```
-
-## **Selendra Example Usage**
-
-Interact with the Selendra blockchain using these comprehensive functions:
+## Usage
 
 ```typescript
-import {
-    createMnemonicSelendra,
-    initSelendra,
-    selendraTransaction,
-} from "@bitriel/wallet-sdk";
+import { MultiChainWalletSDK } from "bitriel-wallet-sdk";
 
-async function selendraWalletOperations() {
-    // Generate a new mnemonic
-    const mnemonic = createMnemonicSelendra();
+// Initialize the SDK
+const sdk = new MultiChainWalletSDK();
 
-    try {
-        // Initialize Selendra wallet
-        const sdk = await initSelendra({
-            rpc_endpoint: "wss://rpc.selendra.org",
-            mnemonic,
-        });
+// Get supported networks
+const networks = sdk.getSupportedNetworks();
 
-        // Display wallet information
-        console.log("Wallet Details:", {
-            address: sdk.address,
-            balance: sdk.balanceSEL,
-        });
+// Connect to a network (e.g., Ethereum Mainnet)
+await sdk.connect("1");
 
-        // Prepare transaction
-        const recipientAddress =
-            "5EkFVKkrvyVhhCWXs6sfri22zXkP5BgenDEHyuL9vaHt78XW";
-        const transactionAmount = 1; // SEL amount
+// Get wallet state (address, balances, etc.)
+const walletState = await sdk.getWalletState();
 
-        // Send transaction
-        const transactionHash = await selendraTransaction({
-            rpc_endpoint: "wss://rpc.selendra.org",
-            privateKey: sdk.privateKeyHex,
-            recipientAddress,
-            amount: transactionAmount,
-        });
+// Send a transaction
+const txHash = await sdk.sendTransaction({
+    to: "0x...",
+    value: "1000000000000000000", // 1 ETH
+});
 
-        // Log transaction details
-        console.log("Transaction Details:", {
-            hash: transactionHash,
-            amount: transactionAmount,
-            recipient: recipientAddress,
-        });
-    } catch (error) {
-        console.error("Selendra Wallet Operation Error:", error);
-    }
-}
+// Sign a message
+const signature = await sdk.signMessage("Hello, World!");
 
-// Execute the wallet operations
-selendraWalletOperations();
+// Disconnect
+await sdk.disconnect();
 ```
 
-### **Selendra Network Features**
+## Supported Networks
 
--   Native token: SEL
--   Substrate-based blockchain
--   Support for complex transactions
--   Interoperable cross-chain capabilities
+### Polkadot Ecosystem
 
-## **Additional Resources**
+-   Polkadot Mainnet
+-   Kusama
 
--   [Selendra Documentation](https://www.selendra.org/documents)
--   [Blockchain SDK GitHub](https://github.com/bitriel/wallet-sdk)
--   Support: allencode.dev@icloud.com
+### Ethereum EVM Ecosystem
+
+-   Ethereum Mainnet
+-   Polygon Mainnet
+
+## Token Support
+
+The SDK supports both native tokens and ERC-20 tokens on EVM chains. For Polkadot chains, token support is implemented through the respective chain's token pallet.
+
+## API Reference
+
+### MultiChainWalletSDK
+
+#### Constructor
+
+```typescript
+new MultiChainWalletSDK();
+```
+
+#### Methods
+
+-   `connect(networkId: string): Promise<void>`
+
+    -   Connects to the specified network
+    -   Throws an error if the network is not supported
+
+-   `disconnect(): Promise<void>`
+
+    -   Disconnects from the current network
+
+-   `getWalletState(): Promise<WalletState>`
+
+    -   Returns the current wallet state including address, balances, and network
+
+-   `sendTransaction(tx: TransactionRequest): Promise<string>`
+
+    -   Sends a transaction and returns the transaction hash
+    -   Transaction format depends on the network type (EVM or Polkadot)
+
+-   `signMessage(message: string): Promise<string>`
+
+    -   Signs a message and returns the signature
+
+-   `getSupportedNetworks(): NetworkConfig[]`
+
+    -   Returns a list of supported networks
+
+-   `getCurrentNetwork(): NetworkConfig | null`
+    -   Returns the currently connected network
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+MIT

@@ -11,7 +11,10 @@
     },
     "scripts": {
         "build": "tsup",
-        "test": "ts-node test/index.ts"
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:coverage": "jest --coverage",
+        "test:execute": "ts-node test/multichain-wallet-execution.test.ts"
     },
     "keywords": [
         "bitriel",
@@ -21,6 +24,9 @@
     "author": "samallen",
     "license": "MIT",
     "devDependencies": {
+        "@types/jest": "^29.5.14",
+        "jest": "^29.7.0",
+        "ts-jest": "^29.2.6",
         "ts-node": "^10.9.2",
         "tsup": "^8.0.2",
         "typescript": "^5.4.5"

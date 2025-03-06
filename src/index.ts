@@ -5,3 +5,7 @@ export * from "./sdk";
 export * from "./wallet/wallet";
 export * from "./wallet/selendra";
 export * from "./address";
+export * from "./wallet/types";
+export * from "./config/networks";
+export * from "./wallet/substrate";
+export * from "./wallet/evm";
