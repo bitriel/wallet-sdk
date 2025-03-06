@@ -80,7 +80,7 @@ export const SUBSTRATE_NETWORKS: SubstrateNetworkConfig[] = [
         },
         ss58Format: 42,
         genesisHash:
-            "0x0000000000000000000000000000000000000000000000000000000000000003", // Replace with actual genesis hash
+            "0x9e17c622381c36351de3ff9dc662282bf89ea2f420a9c55e23ff4fd815d2886a", // Replace with actual genesis hash
     },
 ];
 
@@ -107,52 +107,52 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
             // Add other known tokens here
         ],
     },
-    // {
-    //     type: "evm",
-    //     name: "Ethereum Mainnet",
-    //     chainId: 1,
-    //     rpcUrl: "https://eth-mainnet.g.alchemy.com/v2/YOUR-API-KEY",
-    //     explorerUrl: "https://etherscan.io",
-    //     nativeCurrency: {
-    //         name: "Ethereum",
-    //         symbol: "ETH",
-    //         decimals: 18,
-    //     },
-    //     tokens: [
-    //         {
-    //             address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", // USDT
-    //             name: "Tether USD",
-    //             symbol: "USDT",
-    //             decimals: 6,
-    //         },
-    //         {
-    //             address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC
-    //             name: "USD Coin",
-    //             symbol: "USDC",
-    //             decimals: 6,
-    //         },
-    //     ],
-    // },
-    // {
-    //     type: "evm",
-    //     name: "Polygon Mainnet",
-    //     chainId: 137,
-    //     rpcUrl: "https://polygon-rpc.com",
-    //     explorerUrl: "https://polygonscan.com",
-    //     nativeCurrency: {
-    //         name: "MATIC",
-    //         symbol: "MATIC",
-    //         decimals: 18,
-    //     },
-    //     tokens: [
-    //         {
-    //             address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F", // USDT
-    //             name: "Tether USD",
-    //             symbol: "USDT",
-    //             decimals: 6,
-    //         },
-    //     ],
-    // },
+    {
+        type: "evm",
+        name: "Ethereum Mainnet",
+        chainId: 1,
+        rpcUrl: "https://eth-mainnet.g.alchemy.com/v2/YOUR-API-KEY",
+        explorerUrl: "https://etherscan.io",
+        nativeCurrency: {
+            name: "Ethereum",
+            symbol: "ETH",
+            decimals: 18,
+        },
+        tokens: [
+            {
+                address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", // USDT
+                name: "Tether USD",
+                symbol: "USDT",
+                decimals: 6,
+            },
+            {
+                address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC
+                name: "USD Coin",
+                symbol: "USDC",
+                decimals: 6,
+            },
+        ],
+    },
+    {
+        type: "evm",
+        name: "Polygon Mainnet",
+        chainId: 137,
+        rpcUrl: "https://polygon-rpc.com",
+        explorerUrl: "https://polygonscan.com",
+        nativeCurrency: {
+            name: "MATIC",
+            symbol: "MATIC",
+            decimals: 18,
+        },
+        tokens: [
+            {
+                address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F", // USDT
+                name: "Tether USD",
+                symbol: "USDT",
+                decimals: 6,
+            },
+        ],
+    },
 ];
 
 export const SUPPORTED_NETWORKS = [...SUBSTRATE_NETWORKS, ...EVM_NETWORKS];
