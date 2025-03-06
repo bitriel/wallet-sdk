@@ -18,59 +18,17 @@ var __copyProps = (to, from, except, desc) => {
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
-var src_exports = {};
-__export(src_exports, {
+var index_exports = {};
+__export(index_exports, {
+  EVMWalletProvider: () => EVMWalletProvider,
+  EVM_NETWORKS: () => EVM_NETWORKS,
   GENERIC_ABI: () => GENERIC_ABI,
-  SEL: () => SEL,
-  Wallet: () => Wallet,
-  WalletSDK: () => WalletSDK,
-  chainList: () => chainList,
-  chains: () => chains,
-  createMnemonic: () => createMnemonic,
-  createMnemonicSelendra: () => createMnemonicSelendra,
-  initSelendra: () => initSelendra,
-  prettyBalance: () => prettyBalance,
-  selendraTransaction: () => selendraTransaction,
-  shortenEthAddress: () => shortenEthAddress
+  MultiChainWalletSDK: () => MultiChainWalletSDK,
+  SUBSTRATE_NETWORKS: () => SUBSTRATE_NETWORKS,
+  SUPPORTED_NETWORKS: () => SUPPORTED_NETWORKS,
+  SubstrateWalletProvider: () => SubstrateWalletProvider
 });
-module.exports = __toCommonJS(src_exports);
-
-// src/amount.ts
-var import_ethers = require("ethers");
-var SEL = (amount) => {
-  return (0, import_ethers.parseUnits)(amount.toString(), "ether");
-};
-var prettyBalance = (amount) => {
-  return parseFloat((0, import_ethers.formatUnits)(amount, 18)).toFixed(4);
-};
-
-// src/chains/index.ts
-var chains = {
-  "selendra-mainnet": "https://rpc.selendra.org",
-  "selendra-testnet": "https://rpc-testnet.selendra.org"
-};
-
-// src/data/chains.ts
-var chainList = [
-  {
-    name: "Selendra Mainnet",
-    url: "https://rpc.selendra.org",
-    logo: "https://www.selendra.org/logo/sel-logo-blue-notext.png",
-    symbol: "SEL"
-  },
-  {
-    name: "Selendra Testnet",
-    url: "https://rpc-testnet.selendra.org",
-    logo: "https://www.selendra.org/logo/sel-logo-blue-notext.png",
-    symbol: "tSEL"
-  },
-  {
-    name: "Ethereum Mainnet",
-    url: "https://cloudflare-eth.com",
-    logo: "https://icons.llamao.fi/icons/chains/rsz_ethereum.jpg",
-    symbol: "ETH"
-  }
-];
+module.exports = __toCommonJS(index_exports);
 
 // src/data/genericAbi/ERC20.ts
 var ERC20_JSON_ABI = [
@@ -846,227 +804,789 @@ var GENERIC_ABI = {
   ERC1155: ERC1155_JSON_ABI
 };
 
-// src/sdk.ts
-var import_ethers4 = require("ethers");
+// src/config/networks.ts
+var SUBSTRATE_NETWORKS = [
+  {
+    type: "substrate",
+    name: "Polkadot",
+    chainId: "0x0000000000000000000000000000000000000000000000000000000000000000",
+    rpcUrl: "wss://rpc.polkadot.io",
+    explorerUrl: "https://polkadot.subscan.io",
+    nativeCurrency: {
+      name: "Polkadot",
+      symbol: "DOT",
+      decimals: 10
+    },
+    ss58Format: 0,
+    genesisHash: "0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3"
+  },
+  {
+    type: "substrate",
+    name: "Kusama",
+    chainId: "0x0000000000000000000000000000000000000000000000000000000000000002",
+    rpcUrl: "wss://kusama-rpc.polkadot.io",
+    explorerUrl: "https://kusama.subscan.io",
+    nativeCurrency: {
+      name: "Kusama",
+      symbol: "KSM",
+      decimals: 12
+    },
+    ss58Format: 2,
+    genesisHash: "0xb0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe"
+  },
+  {
+    type: "substrate",
+    name: "Selendra",
+    chainId: "0x0000000000000000000000000000000000000000000000000000000000000003",
+    rpcUrl: "wss://rpc.selendra.org",
+    explorerUrl: "https://selendra.subscan.io",
+    nativeCurrency: {
+      name: "Selendra",
+      symbol: "SEL",
+      decimals: 18
+    },
+    ss58Format: 42,
+    genesisHash: "0x0000000000000000000000000000000000000000000000000000000000000003"
+    // Replace with actual genesis hash
+  }
+];
+var EVM_NETWORKS = [
+  {
+    type: "evm",
+    name: "Selendra Mainnet",
+    chainId: 1961,
+    rpcUrl: "https://rpc.selendra.org",
+    explorerUrl: "http://explorer.selendra.org/",
+    nativeCurrency: {
+      name: "Selendra",
+      symbol: "SEL",
+      decimals: 18
+    },
+    tokens: [
+      {
+        address: "0xB2214719304573561Ad8c432b2faFFCd44287190",
+        // Updated SAM token address
+        name: "SAM Token",
+        symbol: "SAM",
+        decimals: 18,
+        logoURI: "https://selendra.org/tokens/sam.png"
+        // Optional: Add logo URL
+      }
+      // Add other known tokens here
+    ]
+  }
+  // {
+  //     type: "evm",
+  //     name: "Ethereum Mainnet",
+  //     chainId: 1,
+  //     rpcUrl: "https://eth-mainnet.g.alchemy.com/v2/YOUR-API-KEY",
+  //     explorerUrl: "https://etherscan.io",
+  //     nativeCurrency: {
+  //         name: "Ethereum",
+  //         symbol: "ETH",
+  //         decimals: 18,
+  //     },
+  //     tokens: [
+  //         {
+  //             address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", // USDT
+  //             name: "Tether USD",
+  //             symbol: "USDT",
+  //             decimals: 6,
+  //         },
+  //         {
+  //             address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC
+  //             name: "USD Coin",
+  //             symbol: "USDC",
+  //             decimals: 6,
+  //         },
+  //     ],
+  // },
+  // {
+  //     type: "evm",
+  //     name: "Polygon Mainnet",
+  //     chainId: 137,
+  //     rpcUrl: "https://polygon-rpc.com",
+  //     explorerUrl: "https://polygonscan.com",
+  //     nativeCurrency: {
+  //         name: "MATIC",
+  //         symbol: "MATIC",
+  //         decimals: 18,
+  //     },
+  //     tokens: [
+  //         {
+  //             address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F", // USDT
+  //             name: "Tether USD",
+  //             symbol: "USDT",
+  //             decimals: 6,
+  //         },
+  //     ],
+  // },
+];
+var SUPPORTED_NETWORKS = [...SUBSTRATE_NETWORKS, ...EVM_NETWORKS];
 
-// src/wallet/wallet.ts
-var import_ethers2 = require("ethers");
-var createMnemonic = () => {
-  return import_ethers2.Mnemonic.entropyToPhrase((0, import_ethers2.randomBytes)(32));
-};
-var Wallet = (mnemonic) => {
-  return import_ethers2.ethers.Wallet.fromPhrase(mnemonic);
-};
-
-// src/tokens/native.ts
-var transfer = (wallet, provider) => {
-  return {
-    transfer: async (to, amount) => {
-      const _wallet = wallet.connect(provider);
-      const tx = await _wallet.sendTransaction({
-        to,
-        value: amount
-      });
-      const receipt = await tx.wait();
-      return receipt;
-    }
-  };
-};
-var balance = (wallet, provider) => {
-  return {
-    balance: async () => {
-      return await provider.getBalance(wallet.address);
-    }
-  };
-};
-var balanceOf = (provider) => {
-  return {
-    balanceOf: async (address) => {
-      return await provider.getBalance(address);
-    }
-  };
-};
-var NativeToken = (wallet, provider) => {
-  return {
-    ...transfer(wallet, provider),
-    ...balanceOf(provider),
-    ...balance(wallet, provider)
-  };
-};
-
-// src/tokens/contract.ts
-var import_ethers3 = require("ethers");
-var CONTRACT = (wallet, provider, address, symbol, abi) => {
-  const _wallet = wallet.connect(provider);
-  const contract = new import_ethers3.Contract(address, abi, _wallet);
-  return contract;
-};
-
-// src/sdk.ts
-var WalletSDK = (mnemonic, chain, contracts = []) => {
-  const provider = new import_ethers4.ethers.JsonRpcProvider(chain);
-  const wallet = Wallet(mnemonic);
-  return {
-    provider,
-    wallet,
-    contracts: new Map(
-      contracts.map((token) => [
-        token.symbol,
-        CONTRACT(wallet, provider, token.address, token.symbol, token.abi)
-      ])
-    ),
-    ...NativeToken(wallet, provider)
-  };
-};
-
-// src/wallet/selendra.ts
-var import_util_crypto2 = require("@polkadot/util-crypto");
-var import_util2 = require("@polkadot/util");
-var import_keyring = require("@polkadot/keyring");
-
-// src/helper/selendraHelper.ts
-var import_api_augment = require("@polkadot/api-augment");
+// src/wallet/substrate.ts
 var import_api = require("@polkadot/api");
-var import_util_crypto = require("@polkadot/util-crypto");
-var import_util = require("@polkadot/util");
-async function connectToSelendra(rpc_endpoint) {
-  const wsProvider = new import_api.WsProvider(rpc_endpoint);
-  const api = new import_api.ApiPromise({ provider: wsProvider });
-  await api.isReady;
-  return api;
-}
-function createKeyPair(mnemonic) {
-  const keyring = new import_api.Keyring({
-    type: "sr25519",
-    ss58Format: 42
-    // Changed from 204 to 42
-  });
-  const pair = keyring.createFromUri(mnemonic);
-  const miniSecret = (0, import_util_crypto.mnemonicToMiniSecret)(mnemonic);
-  return { pair, miniSecret };
-}
-async function fetchBalance(api, address) {
-  const accountInfo = await api.query.system.account(
-    address
-  );
-  return accountInfo.data.free;
-}
-function parseAmount(amount, decimals = 18) {
-  return new import_util.BN(amount).mul(new import_util.BN(10).pow(new import_util.BN(decimals)));
-}
-function handleTransactionError(api, dispatchError, reject) {
-  if (dispatchError.isModule) {
-    const decoded = api.registry.findMetaError(dispatchError.asModule);
-    const { docs, name, section } = decoded;
-    reject(new Error(`${section}.${name}: ${docs.join(" ")}`));
-  } else {
-    reject(new Error(dispatchError.toString()));
+var import_keyring = require("@polkadot/keyring");
+var SubstrateWalletProvider = class {
+  api = null;
+  keyring = null;
+  pair = null;
+  network;
+  mnemonic;
+  constructor(network, mnemonic) {
+    this.network = network;
+    this.mnemonic = mnemonic;
   }
-}
-
-// src/wallet/selendra.ts
-var createMnemonicSelendra = () => {
-  try {
-    return (0, import_util_crypto2.mnemonicGenerate)();
-  } catch (error) {
-    console.error("Error creating mnemonic", error);
-    throw error;
+  async connect() {
+    try {
+      const provider = new import_api.WsProvider(this.network.rpcUrl);
+      const api = await import_api.ApiPromise.create({
+        provider,
+        types: {
+          // Add any custom types needed for Selendra
+          // This is where you would add Selendra-specific types
+        }
+      });
+      this.api = api;
+      this.keyring = new import_keyring.Keyring({
+        type: "sr25519",
+        ss58Format: this.network.ss58Format || 42
+        // Default to 42 for Selendra
+      });
+      this.pair = this.keyring.addFromMnemonic(this.mnemonic);
+    } catch (error) {
+      throw new Error(`Failed to connect to Substrate network: ${error}`);
+    }
   }
-};
-async function initSelendra({
-  rpc_endpoint,
-  mnemonic
-}) {
-  try {
-    await (0, import_util_crypto2.cryptoWaitReady)();
-    const api = await connectToSelendra(rpc_endpoint);
-    const { pair, miniSecret } = createKeyPair(mnemonic);
-    const address = (0, import_util_crypto2.encodeAddress)(pair.publicKey, 42);
-    const balance2 = await fetchBalance(api, address);
-    import_util2.formatBalance.setDefaults({ unit: "SEL" });
-    const balanceSEL = (0, import_util2.formatBalance)(balance2, {
-      decimals: 18,
-      forceUnit: "-"
-    });
-    const privateKeyHex = (0, import_util2.u8aToHex)(miniSecret);
-    return {
-      address,
-      balanceSEL,
-      privateKeyHex
-    };
-  } catch (error) {
-    console.error("Error initializing Selendra wallet:", error);
-    throw error;
+  async disconnect() {
+    if (this.api) {
+      await this.api.disconnect();
+      this.api = null;
+    }
+    this.keyring = null;
+    this.pair = null;
   }
-}
-async function selendraTransaction({
-  rpc_endpoint,
-  privateKey,
-  recipientAddress,
-  amount
-}) {
-  try {
-    await (0, import_util_crypto2.cryptoWaitReady)();
-    const api = await connectToSelendra(rpc_endpoint);
-    const keyring = new import_keyring.Keyring({ type: "sr25519" });
-    const sender = keyring.addFromUri(privateKey);
-    const parsedAmount = parseAmount(amount);
-    const transfer2 = api.tx.balances.transferKeepAlive(
-      recipientAddress,
-      parsedAmount
+  async getAddress() {
+    if (!this.pair) {
+      throw new Error("Wallet not connected");
+    }
+    return this.pair.address;
+  }
+  async signMessage(message) {
+    if (!this.pair) {
+      throw new Error("Wallet not connected");
+    }
+    const signature = this.pair.sign(message);
+    return Buffer.from(signature).toString("hex");
+  }
+  async getBalance() {
+    if (!this.api || !this.pair) {
+      throw new Error("Wallet not connected");
+    }
+    const accountInfo = await this.api.query.system.account(
+      this.pair.address
     );
+    return accountInfo.data.free.toString();
+  }
+  async sendTransaction(tx) {
+    if (!this.api || !this.pair) {
+      throw new Error("Wallet not connected");
+    }
+    const { method, params } = tx;
+    let extrinsic;
+    if (this.network.name === "Selendra") {
+      if (method === "balances") {
+        const [action, recipient, amount] = params;
+        if (action === "transfer") {
+          extrinsic = this.api.tx.balances.transferAllowDeath(
+            recipient,
+            amount
+          );
+        } else {
+          throw new Error(`Unsupported balances action: ${action}`);
+        }
+      } else {
+        throw new Error(
+          `Unsupported transaction method for Selendra: ${method}`
+        );
+      }
+    } else {
+      const txModule = this.api.tx[method];
+      if (!txModule) {
+        throw new Error(`Transaction method ${method} not found`);
+      }
+      const txMethod = txModule[params[0]];
+      if (!txMethod) {
+        throw new Error(
+          `Transaction method ${params[0]} not found in module ${method}`
+        );
+      }
+      extrinsic = txMethod(...params.slice(1));
+    }
     return new Promise((resolve, reject) => {
-      transfer2.signAndSend(
-        sender,
-        { nonce: -1 },
-        // Allow automatic nonce handling
-        ({ status, dispatchError }) => {
-          if (dispatchError) {
-            return handleTransactionError(
-              api,
-              dispatchError,
-              reject
-            );
-          }
-          if (status.isInBlock) {
-            console.log(
-              `Transaction included in block: ${status.asInBlock}`
-            );
-            resolve(status.asInBlock.toString());
-          } else if (status.isFinalized) {
-            console.log(
-              `Transaction finalized in block: ${status.asFinalized}`
-            );
-            resolve(status.asFinalized.toString());
+      extrinsic.signAndSend(
+        this.pair,
+        (result) => {
+          if (result.isFinalized) {
+            resolve(result.txHash.toString());
           }
         }
-      );
+      ).catch(reject);
     });
-  } catch (error) {
-    console.error("Error sending Selendra transaction:", error);
-    throw error;
   }
+  async getTokenBalance(tokenAddress) {
+    if (!this.api || !this.pair) {
+      throw new Error("Wallet not connected");
+    }
+    if (this.network.name === "Selendra") {
+      throw new Error(
+        "Token balance not supported for this implementation"
+      );
+    } else {
+      throw new Error(
+        "Token balance not supported for this implementation"
+      );
+    }
+  }
+  async listTokens() {
+    if (!this.api || !this.pair) {
+      throw new Error("Wallet not connected");
+    }
+    const tokens = [];
+    const nativeBalance = await this.getBalance();
+    tokens.push({
+      address: "0x0000000000000000000000000000000000000000",
+      // Placeholder for native token
+      name: this.network.nativeCurrency.name,
+      symbol: this.network.nativeCurrency.symbol,
+      decimals: this.network.nativeCurrency.decimals,
+      balance: nativeBalance,
+      formatted: this.formatTokenBalance(
+        nativeBalance,
+        this.network.nativeCurrency.decimals
+      )
+    });
+    if (this.network.tokens) {
+      for (const token of this.network.tokens) {
+        try {
+          tokens.push({
+            ...token,
+            balance: "0",
+            formatted: "0.0"
+          });
+        } catch (error) {
+          console.warn(
+            `Failed to get balance for token ${token.symbol}:`,
+            error
+          );
+          tokens.push({
+            ...token,
+            balance: "0",
+            formatted: "0.0"
+          });
+        }
+      }
+    }
+    return tokens;
+  }
+  formatTokenBalance(balance, decimals, precision = 5) {
+    try {
+      const balanceBigInt = BigInt(balance);
+      const divisor = BigInt(10 ** decimals);
+      const wholePart = (balanceBigInt / divisor).toString();
+      let fractionalPart = (balanceBigInt % divisor).toString().padStart(decimals, "0");
+      fractionalPart = fractionalPart.slice(0, precision);
+      const formattedWhole = wholePart.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        ","
+      );
+      return `${formattedWhole}.${fractionalPart}`;
+    } catch (error) {
+      console.warn("Failed to format token balance:", error);
+      return balance;
+    }
+  }
+  async estimateFee(tx) {
+    if (!this.api || !this.pair) {
+      throw new Error("Wallet not connected");
+    }
+    try {
+      const { method, params } = tx;
+      let extrinsic;
+      if (this.network.name === "Selendra") {
+        if (method === "balances") {
+          const [action, recipient, amount] = params;
+          if (action === "transfer") {
+            extrinsic = this.api.tx.balances.transferAllowDeath(
+              recipient,
+              amount
+            );
+          } else {
+            throw new Error(
+              `Unsupported balances action: ${action}`
+            );
+          }
+        } else {
+          throw new Error(
+            `Unsupported transaction method for Selendra: ${method}`
+          );
+        }
+      } else {
+        const txModule = this.api.tx[method];
+        if (!txModule) {
+          throw new Error(`Transaction method ${method} not found`);
+        }
+        const txMethod = txModule[params[0]];
+        if (!txMethod) {
+          throw new Error(
+            `Transaction method ${params[0]} not found in module ${method}`
+          );
+        }
+        extrinsic = txMethod(...params.slice(1));
+      }
+      const paymentInfo = await extrinsic.paymentInfo(this.pair);
+      const fee = paymentInfo.partialFee.toString();
+      const formatted = this.formatTokenBalance(
+        fee,
+        this.network.nativeCurrency.decimals
+      );
+      return {
+        fee,
+        formatted,
+        currency: this.network.nativeCurrency.symbol
+      };
+    } catch (error) {
+      console.error("Failed to estimate fee:", error);
+      throw new Error(`Failed to estimate fee: ${error}`);
+    }
+  }
+  isConnected() {
+    return this.api !== null && this.pair !== null;
+  }
+};
+
+// src/wallet/evm.ts
+var import_ethers = require("ethers");
+var EVMWalletProvider = class {
+  provider = null;
+  signer = null;
+  network;
+  mnemonic;
+  constructor(network, mnemonic) {
+    this.network = network;
+    this.mnemonic = mnemonic;
+  }
+  async connect() {
+    try {
+      this.provider = new import_ethers.ethers.JsonRpcProvider(this.network.rpcUrl);
+      this.signer = import_ethers.ethers.Wallet.fromPhrase(
+        this.mnemonic,
+        this.provider
+      );
+    } catch (error) {
+      throw new Error(`Failed to connect to EVM network: ${error}`);
+    }
+  }
+  async disconnect() {
+    this.provider = null;
+    this.signer = null;
+  }
+  async getAddress() {
+    if (!this.signer) {
+      throw new Error("Wallet not connected");
+    }
+    return await this.signer.getAddress();
+  }
+  async signMessage(message) {
+    if (!this.signer) {
+      throw new Error("Wallet not connected");
+    }
+    return await this.signer.signMessage(message);
+  }
+  async getBalance() {
+    if (!this.provider || !this.signer) {
+      throw new Error("Wallet not connected");
+    }
+    const address = await this.signer.getAddress();
+    const balance = await this.provider.getBalance(address);
+    return balance.toString();
+  }
+  async sendTransaction(tx) {
+    if (!this.signer) {
+      throw new Error("Wallet not connected");
+    }
+    if (!this.isEVMTransaction(tx)) {
+      throw new Error("Invalid transaction type for EVM network");
+    }
+    const transaction = await this.signer.sendTransaction(tx);
+    return transaction.hash;
+  }
+  async getTokenBalance(tokenAddress) {
+    if (!this.provider || !this.signer) {
+      throw new Error("Wallet not connected");
+    }
+    const address = await this.signer.getAddress();
+    if (tokenAddress.toLowerCase() === "0x0000000000000000000000000000000000000000") {
+      const balance = await this.provider.getBalance(address);
+      return balance.toString();
+    }
+    try {
+      console.log(
+        `Checking contract at address ${tokenAddress} on network ${this.network.name} (chainId: ${this.network.chainId})`
+      );
+      const code = await this.provider.getCode(tokenAddress);
+      console.log(`Contract code length: ${code.length}`);
+      if (code === "0x") {
+        console.warn(
+          `No contract found at address ${tokenAddress} on network ${this.network.name}`
+        );
+        return "0";
+      }
+      const tokenContract = new import_ethers.ethers.Contract(
+        tokenAddress,
+        [
+          "function balanceOf(address) view returns (uint256)",
+          "function decimals() view returns (uint8)",
+          "function symbol() view returns (string)"
+        ],
+        this.provider
+      );
+      try {
+        const symbol = await tokenContract.symbol();
+        const decimals = await tokenContract.decimals();
+        console.log(
+          `Contract implements ERC20 interface. Symbol: ${symbol}, Decimals: ${decimals}`
+        );
+      } catch (error) {
+        console.warn(
+          `Contract at ${tokenAddress} does not implement ERC20 interface: ${error}`
+        );
+        return "0";
+      }
+      const balance = await tokenContract.balanceOf(address);
+      return balance.toString();
+    } catch (error) {
+      console.warn(
+        `Failed to get balance for token ${tokenAddress}:`,
+        error
+      );
+      return "0";
+    }
+  }
+  async listTokens() {
+    if (!this.provider || !this.signer) {
+      throw new Error("Wallet not connected");
+    }
+    const address = await this.signer.getAddress();
+    const tokens = [];
+    const nativeBalance = await this.provider.getBalance(address);
+    tokens.push({
+      address: "0x0000000000000000000000000000000000000000",
+      name: this.network.nativeCurrency.name,
+      symbol: this.network.nativeCurrency.symbol,
+      decimals: this.network.nativeCurrency.decimals,
+      balance: nativeBalance.toString(),
+      formatted: this.formatTokenBalance(
+        nativeBalance.toString(),
+        this.network.nativeCurrency.decimals
+      )
+    });
+    if (this.network.tokens) {
+      for (const token of this.network.tokens) {
+        try {
+          console.log(
+            `Checking token contract at address ${token.address} on network ${this.network.name} (chainId: ${this.network.chainId})`
+          );
+          const code = await this.provider.getCode(token.address);
+          console.log(`Token contract code length: ${code.length}`);
+          if (code === "0x") {
+            console.warn(
+              `No contract found at address ${token.address} on network ${this.network.name}`
+            );
+            tokens.push({
+              ...token,
+              balance: "0",
+              formatted: "0.0"
+            });
+            continue;
+          }
+          const tokenContract = new import_ethers.ethers.Contract(
+            token.address,
+            [
+              "function balanceOf(address) view returns (uint256)",
+              "function decimals() view returns (uint8)",
+              "function symbol() view returns (string)"
+            ],
+            this.provider
+          );
+          try {
+            const symbol = await tokenContract.symbol();
+            const decimals = await tokenContract.decimals();
+            console.log(
+              `Token contract implements ERC20 interface. Symbol: ${symbol}, Decimals: ${decimals}`
+            );
+          } catch (error) {
+            console.warn(
+              `Contract at ${token.address} does not implement ERC20 interface: ${error}`
+            );
+            tokens.push({
+              ...token,
+              balance: "0",
+              formatted: "0.0"
+            });
+            continue;
+          }
+          const balance = await tokenContract.balanceOf(address);
+          tokens.push({
+            ...token,
+            balance: balance.toString(),
+            formatted: this.formatTokenBalance(
+              balance.toString(),
+              token.decimals
+            )
+          });
+        } catch (error) {
+          console.warn(
+            `Failed to get balance for token ${token.symbol}:`,
+            error
+          );
+          tokens.push({
+            ...token,
+            balance: "0",
+            formatted: "0.0"
+          });
+        }
+      }
+    }
+    return tokens;
+  }
+  formatTokenBalance(balance, decimals, precision = 5) {
+    try {
+      const balanceBigInt = BigInt(balance);
+      const divisor = BigInt(10) ** BigInt(decimals);
+      const wholePart = (balanceBigInt / divisor).toString();
+      let fractionalPart = (balanceBigInt % divisor).toString().padStart(decimals, "0");
+      fractionalPart = fractionalPart.slice(0, precision);
+      const formattedWhole = wholePart.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        ","
+      );
+      return `${formattedWhole}.${fractionalPart}`;
+    } catch (error) {
+      console.warn("Failed to format token balance:", error);
+      return balance;
+    }
+  }
+  isConnected() {
+    return this.provider !== null && this.signer !== null;
+  }
+  isEVMTransaction(tx) {
+    return "to" in tx && "value" in tx && typeof tx.value === "string";
+  }
+  async estimateFee(tx) {
+    if (!this.provider || !this.signer) {
+      throw new Error("Wallet not connected");
+    }
+    if (!this.isEVMTransaction(tx)) {
+      throw new Error("Invalid transaction type for EVM network");
+    }
+    try {
+      const gasPrice = await this.provider.getFeeData();
+      if (!gasPrice.gasPrice) {
+        throw new Error("Failed to get gas price");
+      }
+      const gasLimit = await this.provider.estimateGas({
+        from: await this.signer.getAddress(),
+        ...tx
+      });
+      const fee = gasLimit * gasPrice.gasPrice;
+      const formatted = this.formatTokenBalance(
+        fee.toString(),
+        this.network.nativeCurrency.decimals
+      );
+      return {
+        fee: fee.toString(),
+        formatted,
+        currency: this.network.nativeCurrency.symbol
+      };
+    } catch (error) {
+      console.error("Failed to estimate fee:", error);
+      throw new Error(`Failed to estimate fee: ${error}`);
+    }
+  }
+};
+
+// src/utils/mnemonic.ts
+var import_util_crypto = require("@polkadot/util-crypto");
+function generateMnemonic(options = {}) {
+  const {
+    wordCount = 12,
+    strength = 128
+    // 12 words = 128 bits of entropy
+  } = options;
+  if (![12, 15, 18, 21, 24].includes(wordCount)) {
+    throw new Error("Invalid word count. Must be 12, 15, 18, 21, or 24");
+  }
+  if (![128, 160, 192, 224, 256].includes(strength)) {
+    throw new Error("Invalid strength. Must be 128, 160, 192, 224, or 256");
+  }
+  const expectedStrength = wordCount / 3 * 32;
+  if (strength !== expectedStrength) {
+    throw new Error(
+      `Strength ${strength} does not match word count ${wordCount}. Expected strength: ${expectedStrength}`
+    );
+  }
+  return (0, import_util_crypto.mnemonicGenerate)(wordCount);
 }
 
-// src/address.ts
-function shortenEthAddress(address) {
-  if (address.length !== 42) {
-    throw new Error("Invalid Ethereum address length");
+// src/sdk.ts
+var MultiChainWalletSDK = class {
+  providers = /* @__PURE__ */ new Map();
+  currentNetwork = null;
+  constructor(mnemonic) {
+    [...SUPPORTED_NETWORKS].forEach((network) => {
+      const provider = network.type === "substrate" ? new SubstrateWalletProvider(network, mnemonic) : new EVMWalletProvider(network, mnemonic);
+      this.providers.set(network.chainId.toString(), provider);
+    });
   }
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
-}
+  static createMnemonic(options = {}) {
+    return generateMnemonic(options);
+  }
+  async connect(chainId) {
+    const network = [...SUPPORTED_NETWORKS].find(
+      (n) => n.chainId.toString() === chainId
+    );
+    if (!network) {
+      throw new Error(`Network with chain ID ${chainId} not supported`);
+    }
+    const provider = this.providers.get(chainId);
+    if (!provider) {
+      throw new Error(`Provider not found for chain ID ${chainId}`);
+    }
+    await provider.connect();
+    this.currentNetwork = network;
+  }
+  async disconnect() {
+    if (this.currentNetwork) {
+      const provider = this.providers.get(
+        this.currentNetwork.chainId.toString()
+      );
+      if (provider) {
+        await provider.disconnect();
+      }
+      this.currentNetwork = null;
+    }
+  }
+  async getWalletState() {
+    if (!this.currentNetwork) {
+      throw new Error("No network connected");
+    }
+    const provider = this.providers.get(
+      this.currentNetwork.chainId.toString()
+    );
+    if (!provider) {
+      throw new Error("Provider not found");
+    }
+    const address = await provider.getAddress();
+    const nativeBalance = await provider.getBalance();
+    const tokenBalances = [];
+    if (this.currentNetwork.tokens) {
+      for (const token of this.currentNetwork.tokens) {
+        const balance = await provider.getTokenBalance(token.address);
+        const formatted = this.formatTokenBalance(
+          balance,
+          token.decimals
+        );
+        tokenBalances.push({
+          token,
+          balance,
+          formatted
+        });
+      }
+    }
+    return {
+      address,
+      balances: {
+        native: nativeBalance,
+        tokens: tokenBalances
+      },
+      network: this.currentNetwork
+    };
+  }
+  async sendTransaction(tx) {
+    if (!this.currentNetwork) {
+      throw new Error("No network connected");
+    }
+    const provider = this.providers.get(
+      this.currentNetwork.chainId.toString()
+    );
+    if (!provider) {
+      throw new Error("Provider not found");
+    }
+    return provider.sendTransaction(tx);
+  }
+  async signMessage(message) {
+    if (!this.currentNetwork) {
+      throw new Error("No network connected");
+    }
+    const provider = this.providers.get(
+      this.currentNetwork.chainId.toString()
+    );
+    if (!provider) {
+      throw new Error("Provider not found");
+    }
+    return provider.signMessage(message);
+  }
+  getSupportedNetworks() {
+    return [...SUPPORTED_NETWORKS];
+  }
+  getCurrentNetwork() {
+    return this.currentNetwork;
+  }
+  async listTokens() {
+    if (!this.currentNetwork) {
+      throw new Error("No network connected");
+    }
+    const provider = this.providers.get(
+      this.currentNetwork.chainId.toString()
+    );
+    if (!provider) {
+      throw new Error("Provider not found");
+    }
+    return provider.listTokens();
+  }
+  async estimateFee(tx) {
+    if (!this.currentNetwork) {
+      throw new Error("No network connected");
+    }
+    const provider = this.providers.get(
+      this.currentNetwork.chainId.toString()
+    );
+    if (!provider) {
+      throw new Error("Provider not found");
+    }
+    return provider.estimateFee(tx);
+  }
+  formatTokenBalance(balance, decimals) {
+    try {
+      const balanceBigInt = BigInt(balance);
+      const divisor = BigInt(10 ** decimals);
+      const wholePart = (balanceBigInt / divisor).toString();
+      const fractionalPart = (balanceBigInt % divisor).toString().padStart(decimals, "0");
+      return `${wholePart}.${fractionalPart}`;
+    } catch (error) {
+      console.warn("Failed to format token balance:", error);
+      return balance;
+    }
+  }
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  EVMWalletProvider,
+  EVM_NETWORKS,
   GENERIC_ABI,
-  SEL,
-  Wallet,
-  WalletSDK,
-  chainList,
-  chains,
-  createMnemonic,
-  createMnemonicSelendra,
-  initSelendra,
-  prettyBalance,
-  selendraTransaction,
-  shortenEthAddress
+  MultiChainWalletSDK,
+  SUBSTRATE_NETWORKS,
+  SUPPORTED_NETWORKS,
+  SubstrateWalletProvider
 });

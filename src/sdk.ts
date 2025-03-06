@@ -1,74 +1,25 @@
-import { AddressLike, Addressable, Contract, ethers } from "ethers";
-import { Wallet } from "./wallet/wallet";
-import { NativeToken } from "./tokens/native";
-import { CONTRACT } from "./tokens/contract";
 import {
     WalletProvider,
     WalletState,
     TokenBalance,
-    PolkadotTransactionRequest,
-    EVMTransactionRequest,
     TokenInfo,
     TransactionRequest,
     FeeEstimate,
 } from "./wallet/types";
-import {
-    NetworkConfig,
-    SUBSTRATE_NETWORKS,
-    EVM_NETWORKS,
-    SUPPORTED_NETWORKS,
-} from "./config/networks";
+import { NetworkConfig, SUPPORTED_NETWORKS } from "./config/networks";
 import { SubstrateWalletProvider } from "./wallet/substrate";
 import { EVMWalletProvider } from "./wallet/evm";
-
-export type ContractInfo = {
-    abi: ethers.Interface | ethers.InterfaceAbi;
-    address: string;
-    decimal?: number;
-    name: string;
-    symbol: string;
-    type: string;
-    chain: string;
-};
-
-export const WalletSDK = (
-    mnemonic: string,
-    chain: string,
-    contracts: ContractInfo[] = []
-) => {
-    const provider = new ethers.JsonRpcProvider(chain);
-    const wallet = Wallet(mnemonic);
-
-    return {
-        provider,
-        wallet,
-        contracts: new Map(
-            contracts.map((token) => [
-                token.symbol,
-                CONTRACT(
-                    wallet,
-                    provider,
-                    token.address,
-                    token.symbol,
-                    token.abi
-                ),
-            ])
-        ),
-        ...NativeToken(wallet, provider),
-    };
-};
+import { generateMnemonic, MnemonicOptions } from "./utils/mnemonic";
 
 export class MultiChainWalletSDK {
     private providers: Map<string, WalletProvider> = new Map();
     private currentNetwork:
         | (NetworkConfig & { type: "substrate" | "evm" })
         | null = null;
-    private mnemonic: string;
 
     constructor(mnemonic: string) {
-        this.mnemonic = mnemonic;
         // Initialize providers for all supported networks
-        [...SUBSTRATE_NETWORKS, ...EVM_NETWORKS].forEach((network) => {
+        [...SUPPORTED_NETWORKS].forEach((network) => {
             const provider =
                 network.type === "substrate"
                     ? new SubstrateWalletProvider(network, mnemonic)
@@ -77,8 +28,12 @@ export class MultiChainWalletSDK {
         });
     }
 
+    static createMnemonic(options: MnemonicOptions = {}): string {
+        return generateMnemonic(options);
+    }
+
     async connect(chainId: string): Promise<void> {
-        const network = [...SUBSTRATE_NETWORKS, ...EVM_NETWORKS].find(
+        const network = [...SUPPORTED_NETWORKS].find(
             (n) => n.chainId.toString() === chainId
         );
 
@@ -181,7 +136,7 @@ export class MultiChainWalletSDK {
     }
 
     getSupportedNetworks(): NetworkConfig[] {
-        return [...SUBSTRATE_NETWORKS, ...EVM_NETWORKS];
+        return [...SUPPORTED_NETWORKS];
     }
 
     getCurrentNetwork():

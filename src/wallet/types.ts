@@ -1,6 +1,4 @@
-import { NetworkConfig, TokenConfig } from "../config/networks";
-import { KeyringPair } from "@polkadot/keyring/types";
-import { BigNumberish } from "ethers";
+import { NetworkConfig } from "../config/networks";
 import { SubmittableExtrinsic } from "@polkadot/api/types";
 
 export interface TokenInfo {

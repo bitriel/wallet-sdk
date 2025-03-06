@@ -1,17 +1,6 @@
 import * as ethers from 'ethers';
-import { BigNumberish, ethers as ethers$1, AddressLike, Contract } from 'ethers';
-
-declare const SEL: (amount: number) => bigint;
-declare const prettyBalance: (amount: BigNumberish) => string;
-
-declare const chains: Record<string, string>;
-
-declare const chainList: {
-    name: string;
-    url: string;
-    logo: string;
-    symbol: string;
-}[];
+import { ChainProperties } from '@polkadot/types/interfaces';
+import { SubmittableExtrinsic } from '@polkadot/api/types';
 
 declare const GENERIC_ABI: {
     ERC20: ethers.InterfaceAbi;
@@ -19,43 +8,194 @@ declare const GENERIC_ABI: {
     ERC1155: ethers.InterfaceAbi;
 };
 
-type ContractInfo = {
-    abi: ethers$1.Interface | ethers$1.InterfaceAbi;
+interface NetworkConfig {
+    name: string;
+    chainId: string | number;
+    rpcUrl: string;
+    explorerUrl: string;
+    nativeCurrency: {
+        name: string;
+        symbol: string;
+        decimals: number;
+    };
+    tokens?: TokenConfig[];
+}
+interface TokenConfig {
     address: string;
-    decimal?: number;
     name: string;
     symbol: string;
-    type: string;
-    chain: string;
-};
-declare const WalletSDK: (mnemonic: string, chain: string, contracts?: ContractInfo[]) => {
-    balance: () => Promise<bigint>;
-    balanceOf: (address: AddressLike) => Promise<bigint>;
-    transfer: (to: AddressLike, amount: ethers$1.BigNumberish) => Promise<ethers$1.TransactionReceipt | null>;
-    provider: ethers$1.JsonRpcProvider;
-    wallet: ethers$1.HDNodeWallet;
-    contracts: Map<string, Contract>;
-};
+    decimals: number;
+    logoURI?: string;
+}
+interface SubstrateNetworkConfig extends NetworkConfig {
+    type: "substrate";
+    properties?: ChainProperties;
+    ss58Format?: number;
+    genesisHash?: string;
+}
+interface EVMNetworkConfig extends NetworkConfig {
+    type: "evm";
+}
+declare const SUBSTRATE_NETWORKS: SubstrateNetworkConfig[];
+declare const EVM_NETWORKS: EVMNetworkConfig[];
+declare const SUPPORTED_NETWORKS: (SubstrateNetworkConfig | EVMNetworkConfig)[];
 
-declare const createMnemonic: () => string;
-declare const Wallet: (mnemonic: string) => ethers$1.HDNodeWallet;
-
-declare const createMnemonicSelendra: () => string;
-declare function initSelendra({ rpc_endpoint, mnemonic, }: {
-    rpc_endpoint: string;
-    mnemonic: string;
-}): Promise<{
+interface TokenInfo {
     address: string;
-    balanceSEL: string;
-    privateKeyHex: string;
-}>;
-declare function selendraTransaction({ rpc_endpoint, privateKey, recipientAddress, amount, }: {
-    rpc_endpoint: string;
-    privateKey: string;
-    recipientAddress: string;
-    amount: number;
-}): Promise<string>;
+    name: string;
+    symbol: string;
+    decimals: number;
+    logoURI?: string;
+    balance?: string;
+    formatted?: string;
+}
+interface FeeEstimate {
+    fee: string;
+    formatted: string;
+    currency: string;
+}
+interface WalletProvider {
+    connect(): Promise<void>;
+    disconnect(): Promise<void>;
+    getAddress(): Promise<string>;
+    signMessage(message: string): Promise<string>;
+    getBalance(): Promise<string>;
+    sendTransaction(tx: TransactionRequest): Promise<string>;
+    getTokenBalance(tokenAddress: string): Promise<string>;
+    isConnected(): boolean;
+    listTokens(): Promise<TokenInfo[]>;
+    estimateFee(tx: TransactionRequest): Promise<FeeEstimate>;
+}
+interface TokenBalance {
+    token: {
+        address: string;
+        name: string;
+        symbol: string;
+        decimals: number;
+        logoURI?: string;
+    };
+    balance: string;
+    formatted: string;
+}
+interface WalletBalances {
+    native: string;
+    tokens: TokenBalance[];
+}
+interface WalletState {
+    address: string;
+    balances: WalletBalances;
+    network: (NetworkConfig & {
+        type: "substrate" | "evm";
+    }) | null;
+}
+interface PolkadotTransactionRequest {
+    method: string;
+    params: (string | number | boolean | Uint8Array | null)[];
+}
+interface EVMTransactionRequest {
+    to: string;
+    value: string;
+    data?: string;
+    gasLimit?: string;
+    gasPrice?: string;
+    maxFeePerGas?: string;
+    maxPriorityFeePerGas?: string;
+    nonce?: number;
+}
+type TransactionRequest = PolkadotTransactionRequest | EVMTransactionRequest;
+interface SubstrateTransactionResult {
+    isFinalized: boolean;
+    txHash: {
+        toString: () => string;
+    };
+}
+interface SubstrateAccountInfo {
+    data: {
+        free: {
+            toString: () => string;
+        };
+    };
+}
+interface SubstrateExtrinsic {
+    signAndSend(signer: unknown, callback: (result: SubstrateTransactionResult) => void): Promise<() => void>;
+}
+interface SubstrateTxModule {
+    [key: string]: (...args: (string | number | boolean | Uint8Array | null)[]) => SubmittableExtrinsic<"promise">;
+}
+interface SubstrateApi {
+    tx: {
+        [key: string]: SubstrateTxModule;
+    };
+    query: {
+        system: {
+            account: (address: string) => Promise<SubstrateAccountInfo>;
+        };
+    };
+    disconnect(): Promise<void>;
+}
 
-declare function shortenEthAddress(address: string): string;
+interface MnemonicOptions {
+    wordCount?: 12 | 15 | 18 | 21 | 24;
+    strength?: 128 | 160 | 192 | 224 | 256;
+}
 
-export { type ContractInfo, GENERIC_ABI, SEL, Wallet, WalletSDK, chainList, chains, createMnemonic, createMnemonicSelendra, initSelendra, prettyBalance, selendraTransaction, shortenEthAddress };
+declare class MultiChainWalletSDK {
+    private providers;
+    private currentNetwork;
+    constructor(mnemonic: string);
+    static createMnemonic(options?: MnemonicOptions): string;
+    connect(chainId: string): Promise<void>;
+    disconnect(): Promise<void>;
+    getWalletState(): Promise<WalletState>;
+    sendTransaction(tx: TransactionRequest): Promise<string>;
+    signMessage(message: string): Promise<string>;
+    getSupportedNetworks(): NetworkConfig[];
+    getCurrentNetwork(): (NetworkConfig & {
+        type: "substrate" | "evm";
+    }) | null;
+    listTokens(): Promise<TokenInfo[]>;
+    estimateFee(tx: TransactionRequest): Promise<FeeEstimate>;
+    private formatTokenBalance;
+}
+
+declare class SubstrateWalletProvider implements WalletProvider {
+    private api;
+    private keyring;
+    private pair;
+    private network;
+    private mnemonic;
+    constructor(network: SubstrateNetworkConfig, mnemonic: string);
+    connect(): Promise<void>;
+    disconnect(): Promise<void>;
+    getAddress(): Promise<string>;
+    signMessage(message: string): Promise<string>;
+    getBalance(): Promise<string>;
+    sendTransaction(tx: PolkadotTransactionRequest): Promise<string>;
+    getTokenBalance(tokenAddress: string): Promise<string>;
+    listTokens(): Promise<TokenInfo[]>;
+    private formatTokenBalance;
+    estimateFee(tx: PolkadotTransactionRequest): Promise<FeeEstimate>;
+    isConnected(): boolean;
+}
+
+declare class EVMWalletProvider implements WalletProvider {
+    private provider;
+    private signer;
+    private network;
+    private mnemonic;
+    constructor(network: EVMNetworkConfig, mnemonic: string);
+    connect(): Promise<void>;
+    disconnect(): Promise<void>;
+    getAddress(): Promise<string>;
+    signMessage(message: string): Promise<string>;
+    getBalance(): Promise<string>;
+    sendTransaction(tx: TransactionRequest): Promise<string>;
+    getTokenBalance(tokenAddress: string): Promise<string>;
+    listTokens(): Promise<TokenInfo[]>;
+    private formatTokenBalance;
+    isConnected(): boolean;
+    private isEVMTransaction;
+    estimateFee(tx: TransactionRequest): Promise<FeeEstimate>;
+}
+
+export { type EVMNetworkConfig, type EVMTransactionRequest, EVMWalletProvider, EVM_NETWORKS, type FeeEstimate, GENERIC_ABI, MultiChainWalletSDK, type NetworkConfig, type PolkadotTransactionRequest, SUBSTRATE_NETWORKS, SUPPORTED_NETWORKS, type SubstrateAccountInfo, type SubstrateApi, type SubstrateExtrinsic, type SubstrateNetworkConfig, type SubstrateTransactionResult, type SubstrateTxModule, SubstrateWalletProvider, type TokenBalance, type TokenConfig, type TokenInfo, type TransactionRequest, type WalletBalances, type WalletProvider, type WalletState };
