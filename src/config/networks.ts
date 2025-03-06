@@ -111,7 +111,7 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
         type: "evm",
         name: "Ethereum Mainnet",
         chainId: 1,
-        rpcUrl: "https://eth-mainnet.g.alchemy.com/v2/YOUR-API-KEY",
+        rpcUrl: "https://mainnet.infura.io/v3/YOUR-API-KEY",
         explorerUrl: "https://etherscan.io",
         nativeCurrency: {
             name: "Ethereum",
