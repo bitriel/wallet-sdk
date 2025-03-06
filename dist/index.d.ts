@@ -139,7 +139,7 @@ interface MnemonicOptions {
     strength?: 128 | 160 | 192 | 224 | 256;
 }
 
-declare class MultiChainWalletSDK {
+declare class BitrielWalletSDK {
     private providers;
     private currentNetwork;
     constructor(mnemonic: string);
@@ -198,4 +198,4 @@ declare class EVMWalletProvider implements WalletProvider {
     estimateFee(tx: TransactionRequest): Promise<FeeEstimate>;
 }
 
-export { type EVMNetworkConfig, type EVMTransactionRequest, EVMWalletProvider, EVM_NETWORKS, type FeeEstimate, GENERIC_ABI, MultiChainWalletSDK, type NetworkConfig, type PolkadotTransactionRequest, SUBSTRATE_NETWORKS, SUPPORTED_NETWORKS, type SubstrateAccountInfo, type SubstrateApi, type SubstrateExtrinsic, type SubstrateNetworkConfig, type SubstrateTransactionResult, type SubstrateTxModule, SubstrateWalletProvider, type TokenBalance, type TokenConfig, type TokenInfo, type TransactionRequest, type WalletBalances, type WalletProvider, type WalletState };
+export { BitrielWalletSDK, type EVMNetworkConfig, type EVMTransactionRequest, EVMWalletProvider, EVM_NETWORKS, type FeeEstimate, GENERIC_ABI, type NetworkConfig, type PolkadotTransactionRequest, SUBSTRATE_NETWORKS, SUPPORTED_NETWORKS, type SubstrateAccountInfo, type SubstrateApi, type SubstrateExtrinsic, type SubstrateNetworkConfig, type SubstrateTransactionResult, type SubstrateTxModule, SubstrateWalletProvider, type TokenBalance, type TokenConfig, type TokenInfo, type TransactionRequest, type WalletBalances, type WalletProvider, type WalletState };

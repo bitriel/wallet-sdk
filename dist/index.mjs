@@ -1411,7 +1411,7 @@ function generateMnemonic(options = {}) {
 }
 
 // src/sdk.ts
-var MultiChainWalletSDK = class {
+var BitrielWalletSDK = class {
   providers = /* @__PURE__ */ new Map();
   currentNetwork = null;
   constructor(mnemonic) {
@@ -1552,10 +1552,10 @@ var MultiChainWalletSDK = class {
   }
 };
 export {
+  BitrielWalletSDK,
   EVMWalletProvider,
   EVM_NETWORKS,
   GENERIC_ABI,
-  MultiChainWalletSDK,
   SUBSTRATE_NETWORKS,
   SUPPORTED_NETWORKS,
   SubstrateWalletProvider

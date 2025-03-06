@@ -20,10 +20,10 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/index.ts
 var index_exports = {};
 __export(index_exports, {
+  BitrielWalletSDK: () => BitrielWalletSDK,
   EVMWalletProvider: () => EVMWalletProvider,
   EVM_NETWORKS: () => EVM_NETWORKS,
   GENERIC_ABI: () => GENERIC_ABI,
-  MultiChainWalletSDK: () => MultiChainWalletSDK,
   SUBSTRATE_NETWORKS: () => SUBSTRATE_NETWORKS,
   SUPPORTED_NETWORKS: () => SUPPORTED_NETWORKS,
   SubstrateWalletProvider: () => SubstrateWalletProvider
@@ -1443,7 +1443,7 @@ function generateMnemonic(options = {}) {
 }
 
 // src/sdk.ts
-var MultiChainWalletSDK = class {
+var BitrielWalletSDK = class {
   providers = /* @__PURE__ */ new Map();
   currentNetwork = null;
   constructor(mnemonic) {
@@ -1585,10 +1585,10 @@ var MultiChainWalletSDK = class {
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  BitrielWalletSDK,
   EVMWalletProvider,
   EVM_NETWORKS,
   GENERIC_ABI,
-  MultiChainWalletSDK,
   SUBSTRATE_NETWORKS,
   SUPPORTED_NETWORKS,
   SubstrateWalletProvider

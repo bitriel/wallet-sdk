@@ -1,4 +1,4 @@
-import { MultiChainWalletSDK } from "../src/sdk";
+import { BitrielWalletSDK } from "../src/sdk";
 import { SUBSTRATE_NETWORKS, EVM_NETWORKS } from "../src/config/networks";
 import { TransactionRequest } from "../src/wallet/types";
 import { parseTransactionAmount } from "../src/utils/amount";
@@ -8,7 +8,7 @@ async function main() {
     const mnemonic = "REPLACE_WITH_YOUR_TEST_MNEMONIC"; // DO NOT commit real mnemonics to version control
 
     // Initialize the SDK with mnemonic
-    const sdk = new MultiChainWalletSDK(mnemonic);
+    const sdk = new BitrielWalletSDK(mnemonic);
 
     try {
         // Test Substrate Chain (Selendra)

@@ -11,7 +11,7 @@ import { SubstrateWalletProvider } from "./wallet/substrate";
 import { EVMWalletProvider } from "./wallet/evm";
 import { generateMnemonic, MnemonicOptions } from "./utils/mnemonic";
 
-export class MultiChainWalletSDK {
+export class BitrielWalletSDK {
     private providers: Map<string, WalletProvider> = new Map();
     private currentNetwork:
         | (NetworkConfig & { type: "substrate" | "evm" })

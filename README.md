@@ -35,10 +35,10 @@ pnpm add bitriel-wallet-sdk
 ## Quick Start
 
 ```typescript
-import { MultiChainWalletSDK } from "bitriel-wallet-sdk";
+import { BitrielWalletSDK } from "bitriel-wallet-sdk";
 
 // Initialize the SDK
-const sdk = new MultiChainWalletSDK();
+const sdk = new BitrielWalletSDK();
 
 // Get supported networks
 const networks = sdk.getSupportedNetworks();
@@ -81,12 +81,12 @@ await sdk.disconnect();
 
 ## API Reference
 
-### MultiChainWalletSDK
+### BitrielWalletSDK
 
 #### Constructor
 
 ```typescript
-new MultiChainWalletSDK(options?: SDKOptions)
+new BitrielWalletSDK(options?: SDKOptions)
 ```
 
 #### Methods
