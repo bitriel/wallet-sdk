@@ -21,7 +21,9 @@ export class EVMWalletProvider implements WalletProvider {
 
     async connect(): Promise<void> {
         try {
-            this.provider = new ethers.JsonRpcProvider(this.network.rpcUrl);
+            this.provider = new ethers.JsonRpcProvider(
+                this.network.rpcUrl as string
+            );
             // Use the provided mnemonic to create the wallet
             this.signer = ethers.Wallet.fromPhrase(
                 this.mnemonic,

@@ -28,7 +28,7 @@ export class SubstrateWalletProvider implements WalletProvider {
 
     async connect(): Promise<void> {
         try {
-            const provider = new WsProvider(this.network.rpcUrl);
+            const provider = new WsProvider(this.network.rpcUrl as string);
             const api = await ApiPromise.create({
                 provider,
                 types: {

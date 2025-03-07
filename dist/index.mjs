@@ -776,38 +776,11 @@ var GENERIC_ABI = {
 var SUBSTRATE_NETWORKS = [
   {
     type: "substrate",
-    name: "Polkadot",
-    chainId: "0x0000000000000000000000000000000000000000000000000000000000000000",
-    rpcUrl: "wss://rpc.polkadot.io",
-    explorerUrl: "https://polkadot.subscan.io",
-    nativeCurrency: {
-      name: "Polkadot",
-      symbol: "DOT",
-      decimals: 10
-    },
-    ss58Format: 0,
-    genesisHash: "0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3"
-  },
-  {
-    type: "substrate",
-    name: "Kusama",
-    chainId: "0x0000000000000000000000000000000000000000000000000000000000000002",
-    rpcUrl: "wss://kusama-rpc.polkadot.io",
-    explorerUrl: "https://kusama.subscan.io",
-    nativeCurrency: {
-      name: "Kusama",
-      symbol: "KSM",
-      decimals: 12
-    },
-    ss58Format: 2,
-    genesisHash: "0xb0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe"
-  },
-  {
-    type: "substrate",
     name: "Selendra",
     chainId: "0x0000000000000000000000000000000000000000000000000000000000000003",
     rpcUrl: "wss://rpc.selendra.org",
     explorerUrl: "https://selendra.subscan.io",
+    logo: "https://www.selendra.org/logo/sel-logo-blue-notext.png",
     nativeCurrency: {
       name: "Selendra",
       symbol: "SEL",
@@ -817,6 +790,40 @@ var SUBSTRATE_NETWORKS = [
     genesisHash: "0x9e17c622381c36351de3ff9dc662282bf89ea2f420a9c55e23ff4fd815d2886a"
     // Replace with actual genesis hash
   }
+  // {
+  //     type: "substrate",
+  //     name: "Polkadot",
+  //     chainId:
+  //         "0x0000000000000000000000000000000000000000000000000000000000000000",
+  //     rpcUrl: "wss://rpc.polkadot.io",
+  //     explorerUrl: "https://polkadot.subscan.io",
+  //     logo: "https://cryptologos.cc/logos/polkadot-new-dot-logo.svg?v=040",
+  //     nativeCurrency: {
+  //         name: "Polkadot",
+  //         symbol: "DOT",
+  //         decimals: 10,
+  //     },
+  //     ss58Format: 0,
+  //     genesisHash:
+  //         "0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3",
+  // },
+  // {
+  //     type: "substrate",
+  //     name: "Kusama",
+  //     chainId:
+  //         "0x0000000000000000000000000000000000000000000000000000000000000002",
+  //     rpcUrl: "wss://kusama-rpc.polkadot.io",
+  //     explorerUrl: "https://kusama.subscan.io",
+  //     logo: "https://raw.githubusercontent.com/polkadot-js/apps/master/packages/apps/public/kusama_circle.svg",
+  //     nativeCurrency: {
+  //         name: "Kusama",
+  //         symbol: "KSM",
+  //         decimals: 12,
+  //     },
+  //     ss58Format: 2,
+  //     genesisHash:
+  //         "0xb0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe",
+  // },
 ];
 var EVM_NETWORKS = [
   {
@@ -825,6 +832,7 @@ var EVM_NETWORKS = [
     chainId: 1961,
     rpcUrl: "https://rpc.selendra.org",
     explorerUrl: "http://explorer.selendra.org/",
+    logo: "https://www.selendra.org/logo/sel-logo-blue-notext.png",
     nativeCurrency: {
       name: "Selendra",
       symbol: "SEL",
@@ -833,22 +841,27 @@ var EVM_NETWORKS = [
     tokens: [
       {
         address: "0xB2214719304573561Ad8c432b2faFFCd44287190",
-        // Updated SAM token address
         name: "SAM Token",
         symbol: "SAM",
         decimals: 18,
         logoURI: "https://selendra.org/tokens/sam.png"
-        // Optional: Add logo URL
       }
-      // Add other known tokens here
     ]
   },
   {
     type: "evm",
     name: "Ethereum Mainnet",
     chainId: 1,
-    rpcUrl: "https://mainnet.infura.io/v3/YOUR-API-KEY",
+    rpcUrl: (apiKeys) => {
+      if (apiKeys?.custom) return apiKeys.custom;
+      if (apiKeys?.infura)
+        return `https://mainnet.infura.io/v3/${apiKeys.infura}`;
+      if (apiKeys?.alchemy)
+        return `https://eth-mainnet.g.alchemy.com/v2/${apiKeys.alchemy}`;
+      return "https://eth.public-rpc.com";
+    },
     explorerUrl: "https://etherscan.io",
+    logo: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=040",
     nativeCurrency: {
       name: "Ethereum",
       symbol: "ETH",
@@ -857,14 +870,12 @@ var EVM_NETWORKS = [
     tokens: [
       {
         address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-        // USDT
         name: "Tether USD",
         symbol: "USDT",
         decimals: 6
       },
       {
         address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-        // USDC
         name: "USD Coin",
         symbol: "USDC",
         decimals: 6
@@ -875,8 +886,16 @@ var EVM_NETWORKS = [
     type: "evm",
     name: "Polygon Mainnet",
     chainId: 137,
-    rpcUrl: "https://polygon-rpc.com",
+    rpcUrl: (apiKeys) => {
+      if (apiKeys?.custom) return apiKeys.custom;
+      if (apiKeys?.infura)
+        return `https://polygon-mainnet.infura.io/v3/${apiKeys.infura}`;
+      if (apiKeys?.alchemy)
+        return `https://polygon-mainnet.g.alchemy.com/v2/${apiKeys.alchemy}`;
+      return "https://polygon-rpc.com";
+    },
     explorerUrl: "https://polygonscan.com",
+    logo: "https://cryptologos.cc/logos/polygon-matic-logo.svg?v=040",
     nativeCurrency: {
       name: "MATIC",
       symbol: "MATIC",
@@ -885,7 +904,6 @@ var EVM_NETWORKS = [
     tokens: [
       {
         address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
-        // USDT
         name: "Tether USD",
         symbol: "USDT",
         decimals: 6
@@ -893,6 +911,12 @@ var EVM_NETWORKS = [
     ]
   }
 ];
+function getRpcUrl(network, apiKeys) {
+  if (typeof network.rpcUrl === "function") {
+    return network.rpcUrl(apiKeys);
+  }
+  return network.rpcUrl;
+}
 var SUPPORTED_NETWORKS = [...SUBSTRATE_NETWORKS, ...EVM_NETWORKS];
 
 // src/wallet/substrate.ts
@@ -1149,7 +1173,9 @@ var EVMWalletProvider = class {
   }
   async connect() {
     try {
-      this.provider = new ethers.JsonRpcProvider(this.network.rpcUrl);
+      this.provider = new ethers.JsonRpcProvider(
+        this.network.rpcUrl
+      );
       this.signer = ethers.Wallet.fromPhrase(
         this.mnemonic,
         this.provider
@@ -1558,5 +1584,6 @@ export {
   GENERIC_ABI,
   SUBSTRATE_NETWORKS,
   SUPPORTED_NETWORKS,
-  SubstrateWalletProvider
+  SubstrateWalletProvider,
+  getRpcUrl
 };
