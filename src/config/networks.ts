@@ -1,15 +1,9 @@
 import { ChainProperties } from "@polkadot/types/interfaces";
 
-// Configuration type for RPC provider API keys
-export interface RpcProviderApiKeys {
-    infura?: string;
-    custom?: string;
-}
-
 export interface NetworkConfig {
     name: string;
     chainId: string | number;
-    rpcUrl: string | ((apiKeys?: RpcProviderApiKeys) => string);
+    rpcUrl: string;
     explorerUrl: string;
     logo?: string;
     nativeCurrency: {
@@ -121,12 +115,7 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
         type: "evm",
         name: "Ethereum Mainnet",
         chainId: 1,
-        rpcUrl: (apiKeys?: RpcProviderApiKeys) => {
-            if (apiKeys?.custom) return apiKeys.custom;
-            if (apiKeys?.infura)
-                return `https://mainnet.infura.io/v3/${apiKeys.infura}`;
-            return "https://eth.public-rpc.com"; // Fallback to a public RPC
-        },
+        rpcUrl: "https://eth.public-rpc.com",
         explorerUrl: "https://etherscan.io",
         logo: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=040",
         nativeCurrency: {
@@ -153,12 +142,7 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
         type: "evm",
         name: "Polygon Mainnet",
         chainId: 137,
-        rpcUrl: (apiKeys?: RpcProviderApiKeys) => {
-            if (apiKeys?.custom) return apiKeys.custom;
-            if (apiKeys?.infura)
-                return `https://polygon-mainnet.infura.io/v3/${apiKeys.infura}`;
-            return "https://polygon-rpc.com"; // Fallback to public RPC
-        },
+        rpcUrl: "https://polygon-rpc.com",
         explorerUrl: "https://polygonscan.com",
         logo: "https://cryptologos.cc/logos/polygon-matic-logo.svg?v=040",
         nativeCurrency: {
@@ -176,16 +160,5 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
         ],
     },
 ];
-
-// Helper function to get RPC URL with API keys configuration
-export function getRpcUrl(
-    network: NetworkConfig,
-    apiKeys?: RpcProviderApiKeys
-): string {
-    if (typeof network.rpcUrl === "function") {
-        return network.rpcUrl(apiKeys);
-    }
-    return network.rpcUrl;
-}
 
 export const SUPPORTED_NETWORKS = [...SUBSTRATE_NETWORKS, ...EVM_NETWORKS];

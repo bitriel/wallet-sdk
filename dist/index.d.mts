@@ -8,14 +8,10 @@ declare const GENERIC_ABI: {
     ERC1155: ethers.InterfaceAbi;
 };
 
-interface RpcProviderApiKeys {
-    infura?: string;
-    custom?: string;
-}
 interface NetworkConfig {
     name: string;
     chainId: string | number;
-    rpcUrl: string | ((apiKeys?: RpcProviderApiKeys) => string);
+    rpcUrl: string;
     explorerUrl: string;
     logo?: string;
     nativeCurrency: {
@@ -43,7 +39,6 @@ interface EVMNetworkConfig extends NetworkConfig {
 }
 declare const SUBSTRATE_NETWORKS: SubstrateNetworkConfig[];
 declare const EVM_NETWORKS: EVMNetworkConfig[];
-declare function getRpcUrl(network: NetworkConfig, apiKeys?: RpcProviderApiKeys): string;
 declare const SUPPORTED_NETWORKS: (SubstrateNetworkConfig | EVMNetworkConfig)[];
 
 interface TokenInfo {
@@ -221,4 +216,4 @@ declare function parseTransactionAmount(amount: string | number | boolean | Uint
  */
 declare function formatTransactionAmount(amount: string, chainType: "substrate" | "evm", decimals?: number): string;
 
-export { BitrielWalletSDK, type EVMNetworkConfig, type EVMTransactionRequest, EVMWalletProvider, EVM_NETWORKS, type FeeEstimate, GENERIC_ABI, type NetworkConfig, type PolkadotTransactionRequest, type RpcProviderApiKeys, SUBSTRATE_NETWORKS, SUPPORTED_NETWORKS, type SubstrateAccountInfo, type SubstrateApi, type SubstrateExtrinsic, type SubstrateNetworkConfig, type SubstrateTransactionResult, type SubstrateTxModule, SubstrateWalletProvider, type TokenBalance, type TokenConfig, type TokenInfo, type TransactionRequest, type WalletBalances, type WalletProvider, type WalletState, formatTransactionAmount, getRpcUrl, parseTransactionAmount };
+export { BitrielWalletSDK, type EVMNetworkConfig, type EVMTransactionRequest, EVMWalletProvider, EVM_NETWORKS, type FeeEstimate, GENERIC_ABI, type NetworkConfig, type PolkadotTransactionRequest, SUBSTRATE_NETWORKS, SUPPORTED_NETWORKS, type SubstrateAccountInfo, type SubstrateApi, type SubstrateExtrinsic, type SubstrateNetworkConfig, type SubstrateTransactionResult, type SubstrateTxModule, SubstrateWalletProvider, type TokenBalance, type TokenConfig, type TokenInfo, type TransactionRequest, type WalletBalances, type WalletProvider, type WalletState, formatTransactionAmount, parseTransactionAmount };

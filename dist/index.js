@@ -28,7 +28,6 @@ __export(index_exports, {
   SUPPORTED_NETWORKS: () => SUPPORTED_NETWORKS,
   SubstrateWalletProvider: () => SubstrateWalletProvider,
   formatTransactionAmount: () => formatTransactionAmount,
-  getRpcUrl: () => getRpcUrl,
   parseTransactionAmount: () => parseTransactionAmount
 });
 module.exports = __toCommonJS(index_exports);
@@ -887,12 +886,7 @@ var EVM_NETWORKS = [
     type: "evm",
     name: "Ethereum Mainnet",
     chainId: 1,
-    rpcUrl: (apiKeys) => {
-      if (apiKeys?.custom) return apiKeys.custom;
-      if (apiKeys?.infura)
-        return `https://mainnet.infura.io/v3/${apiKeys.infura}`;
-      return "https://eth.public-rpc.com";
-    },
+    rpcUrl: "https://eth.public-rpc.com",
     explorerUrl: "https://etherscan.io",
     logo: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=040",
     nativeCurrency: {
@@ -919,12 +913,7 @@ var EVM_NETWORKS = [
     type: "evm",
     name: "Polygon Mainnet",
     chainId: 137,
-    rpcUrl: (apiKeys) => {
-      if (apiKeys?.custom) return apiKeys.custom;
-      if (apiKeys?.infura)
-        return `https://polygon-mainnet.infura.io/v3/${apiKeys.infura}`;
-      return "https://polygon-rpc.com";
-    },
+    rpcUrl: "https://polygon-rpc.com",
     explorerUrl: "https://polygonscan.com",
     logo: "https://cryptologos.cc/logos/polygon-matic-logo.svg?v=040",
     nativeCurrency: {
@@ -942,12 +931,6 @@ var EVM_NETWORKS = [
     ]
   }
 ];
-function getRpcUrl(network, apiKeys) {
-  if (typeof network.rpcUrl === "function") {
-    return network.rpcUrl(apiKeys);
-  }
-  return network.rpcUrl;
-}
 var SUPPORTED_NETWORKS = [...SUBSTRATE_NETWORKS, ...EVM_NETWORKS];
 
 // src/wallet/substrate.ts
@@ -1643,6 +1626,5 @@ function formatTransactionAmount(amount, chainType, decimals = 18) {
   SUPPORTED_NETWORKS,
   SubstrateWalletProvider,
   formatTransactionAmount,
-  getRpcUrl,
   parseTransactionAmount
 });
