@@ -4,3 +4,4 @@ export * from "./wallet/types";
 export * from "./config/networks";
 export * from "./wallet/substrate";
 export * from "./wallet/evm";
+export * from "./utils/amount";
