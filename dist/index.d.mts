@@ -205,4 +205,21 @@ declare class EVMWalletProvider implements WalletProvider {
     estimateFee(tx: TransactionRequest): Promise<FeeEstimate>;
 }
 
-export { BitrielWalletSDK, type EVMNetworkConfig, type EVMTransactionRequest, EVMWalletProvider, EVM_NETWORKS, type FeeEstimate, GENERIC_ABI, type NetworkConfig, type PolkadotTransactionRequest, type RpcProviderApiKeys, SUBSTRATE_NETWORKS, SUPPORTED_NETWORKS, type SubstrateAccountInfo, type SubstrateApi, type SubstrateExtrinsic, type SubstrateNetworkConfig, type SubstrateTransactionResult, type SubstrateTxModule, SubstrateWalletProvider, type TokenBalance, type TokenConfig, type TokenInfo, type TransactionRequest, type WalletBalances, type WalletProvider, type WalletState, getRpcUrl };
+/**
+ * Parses amount for both Substrate and EVM chains
+ * @param amount The amount to convert (can be string, number, boolean, Uint8Array, or null)
+ * @param chainType The type of chain ('substrate' or 'evm')
+ * @param decimals Number of decimal places (default: 18)
+ * @returns The amount in base units as string
+ */
+declare function parseTransactionAmount(amount: string | number | boolean | Uint8Array<ArrayBufferLike> | null, chainType: "substrate" | "evm", decimals?: number): string;
+/**
+ * Formats amount for both Substrate and EVM chains
+ * @param amount The amount in base units (as string)
+ * @param chainType The type of chain ('substrate' or 'evm')
+ * @param decimals Number of decimal places (default: 18)
+ * @returns The human-readable amount as string
+ */
+declare function formatTransactionAmount(amount: string, chainType: "substrate" | "evm", decimals?: number): string;
+
+export { BitrielWalletSDK, type EVMNetworkConfig, type EVMTransactionRequest, EVMWalletProvider, EVM_NETWORKS, type FeeEstimate, GENERIC_ABI, type NetworkConfig, type PolkadotTransactionRequest, type RpcProviderApiKeys, SUBSTRATE_NETWORKS, SUPPORTED_NETWORKS, type SubstrateAccountInfo, type SubstrateApi, type SubstrateExtrinsic, type SubstrateNetworkConfig, type SubstrateTransactionResult, type SubstrateTxModule, SubstrateWalletProvider, type TokenBalance, type TokenConfig, type TokenInfo, type TransactionRequest, type WalletBalances, type WalletProvider, type WalletState, formatTransactionAmount, getRpcUrl, parseTransactionAmount };

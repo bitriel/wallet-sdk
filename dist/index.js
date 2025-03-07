@@ -27,7 +27,9 @@ __export(index_exports, {
   SUBSTRATE_NETWORKS: () => SUBSTRATE_NETWORKS,
   SUPPORTED_NETWORKS: () => SUPPORTED_NETWORKS,
   SubstrateWalletProvider: () => SubstrateWalletProvider,
-  getRpcUrl: () => getRpcUrl
+  formatTransactionAmount: () => formatTransactionAmount,
+  getRpcUrl: () => getRpcUrl,
+  parseTransactionAmount: () => parseTransactionAmount
 });
 module.exports = __toCommonJS(index_exports);
 
@@ -1610,6 +1612,31 @@ var BitrielWalletSDK = class {
     }
   }
 };
+
+// src/utils/amount.ts
+var import_util = require("@polkadot/util");
+var import_ethers2 = require("ethers");
+function parseTransactionAmount(amount, chainType, decimals = 18) {
+  if (amount === null || amount === void 0) {
+    throw new Error("Amount cannot be null or undefined");
+  }
+  if (chainType === "evm") {
+    return import_ethers2.ethers.parseEther(amount.toString()).toString();
+  } else {
+    return new import_util.BN(amount.toString()).mul(new import_util.BN(10).pow(new import_util.BN(decimals))).toString();
+  }
+}
+function formatTransactionAmount(amount, chainType, decimals = 18) {
+  if (chainType === "evm") {
+    return import_ethers2.ethers.formatEther(amount);
+  } else {
+    const bn = new import_util.BN(amount);
+    const divisor = new import_util.BN(10).pow(new import_util.BN(decimals));
+    const whole = bn.div(divisor).toString();
+    const fraction = bn.mod(divisor).toString().padStart(decimals, "0");
+    return `${whole}.${fraction}`;
+  }
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   BitrielWalletSDK,
@@ -1619,5 +1646,7 @@ var BitrielWalletSDK = class {
   SUBSTRATE_NETWORKS,
   SUPPORTED_NETWORKS,
   SubstrateWalletProvider,
-  getRpcUrl
+  formatTransactionAmount,
+  getRpcUrl,
+  parseTransactionAmount
 });

@@ -1577,6 +1577,31 @@ var BitrielWalletSDK = class {
     }
   }
 };
+
+// src/utils/amount.ts
+import { BN } from "@polkadot/util";
+import { ethers as ethers2 } from "ethers";
+function parseTransactionAmount(amount, chainType, decimals = 18) {
+  if (amount === null || amount === void 0) {
+    throw new Error("Amount cannot be null or undefined");
+  }
+  if (chainType === "evm") {
+    return ethers2.parseEther(amount.toString()).toString();
+  } else {
+    return new BN(amount.toString()).mul(new BN(10).pow(new BN(decimals))).toString();
+  }
+}
+function formatTransactionAmount(amount, chainType, decimals = 18) {
+  if (chainType === "evm") {
+    return ethers2.formatEther(amount);
+  } else {
+    const bn = new BN(amount);
+    const divisor = new BN(10).pow(new BN(decimals));
+    const whole = bn.div(divisor).toString();
+    const fraction = bn.mod(divisor).toString().padStart(decimals, "0");
+    return `${whole}.${fraction}`;
+  }
+}
 export {
   BitrielWalletSDK,
   EVMWalletProvider,
@@ -1585,5 +1610,7 @@ export {
   SUBSTRATE_NETWORKS,
   SUPPORTED_NETWORKS,
   SubstrateWalletProvider,
-  getRpcUrl
+  formatTransactionAmount,
+  getRpcUrl,
+  parseTransactionAmount
 };
