@@ -3,7 +3,6 @@ import { ChainProperties } from "@polkadot/types/interfaces";
 // Configuration type for RPC provider API keys
 export interface RpcProviderApiKeys {
     infura?: string;
-    alchemy?: string;
     custom?: string;
 }
 
@@ -126,8 +125,6 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
             if (apiKeys?.custom) return apiKeys.custom;
             if (apiKeys?.infura)
                 return `https://mainnet.infura.io/v3/${apiKeys.infura}`;
-            if (apiKeys?.alchemy)
-                return `https://eth-mainnet.g.alchemy.com/v2/${apiKeys.alchemy}`;
             return "https://eth.public-rpc.com"; // Fallback to a public RPC
         },
         explorerUrl: "https://etherscan.io",
@@ -160,8 +157,6 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
             if (apiKeys?.custom) return apiKeys.custom;
             if (apiKeys?.infura)
                 return `https://polygon-mainnet.infura.io/v3/${apiKeys.infura}`;
-            if (apiKeys?.alchemy)
-                return `https://polygon-mainnet.g.alchemy.com/v2/${apiKeys.alchemy}`;
             return "https://polygon-rpc.com"; // Fallback to public RPC
         },
         explorerUrl: "https://polygonscan.com",
