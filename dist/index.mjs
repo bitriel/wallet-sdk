@@ -856,8 +856,6 @@ var EVM_NETWORKS = [
       if (apiKeys?.custom) return apiKeys.custom;
       if (apiKeys?.infura)
         return `https://mainnet.infura.io/v3/${apiKeys.infura}`;
-      if (apiKeys?.alchemy)
-        return `https://eth-mainnet.g.alchemy.com/v2/${apiKeys.alchemy}`;
       return "https://eth.public-rpc.com";
     },
     explorerUrl: "https://etherscan.io",
@@ -890,8 +888,6 @@ var EVM_NETWORKS = [
       if (apiKeys?.custom) return apiKeys.custom;
       if (apiKeys?.infura)
         return `https://polygon-mainnet.infura.io/v3/${apiKeys.infura}`;
-      if (apiKeys?.alchemy)
-        return `https://polygon-mainnet.g.alchemy.com/v2/${apiKeys.alchemy}`;
       return "https://polygon-rpc.com";
     },
     explorerUrl: "https://polygonscan.com",

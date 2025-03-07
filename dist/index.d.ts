@@ -10,7 +10,6 @@ declare const GENERIC_ABI: {
 
 interface RpcProviderApiKeys {
     infura?: string;
-    alchemy?: string;
     custom?: string;
 }
 interface NetworkConfig {
