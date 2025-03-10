@@ -818,7 +818,8 @@ var SUBSTRATE_NETWORKS = [
     nativeCurrency: {
       name: "Selendra",
       symbol: "SEL",
-      decimals: 18
+      decimals: 18,
+      logoURI: "https://www.selendra.org/logo/sel-logo-blue-notext.png"
     },
     ss58Format: 42,
     genesisHash: "0x9e17c622381c36351de3ff9dc662282bf89ea2f420a9c55e23ff4fd815d2886a"
@@ -870,7 +871,8 @@ var EVM_NETWORKS = [
     nativeCurrency: {
       name: "Selendra",
       symbol: "SEL",
-      decimals: 18
+      decimals: 18,
+      logoURI: "https://www.selendra.org/logo/sel-logo-blue-notext.png"
     },
     tokens: [
       {
@@ -892,14 +894,16 @@ var EVM_NETWORKS = [
     nativeCurrency: {
       name: "Ethereum",
       symbol: "ETH",
-      decimals: 18
+      decimals: 18,
+      logoURI: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=040"
     },
     tokens: [
       {
         address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
         name: "Tether USD",
         symbol: "USDT",
-        decimals: 6
+        decimals: 6,
+        logoURI: "https://cryptologos.cc/logos/tether-usdt-logo.svg?v=040"
       },
       {
         address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -919,14 +923,16 @@ var EVM_NETWORKS = [
     nativeCurrency: {
       name: "MATIC",
       symbol: "MATIC",
-      decimals: 18
+      decimals: 18,
+      logoURI: "https://cryptologos.cc/logos/polygon-matic-logo.svg?v=040"
     },
     tokens: [
       {
         address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
         name: "Tether USD",
         symbol: "USDT",
-        decimals: 6
+        decimals: 6,
+        logoURI: "https://cryptologos.cc/logos/tether-usdt-logo.svg?v=040"
       }
     ]
   }

@@ -18,6 +18,7 @@ interface NetworkConfig {
         name: string;
         symbol: string;
         decimals: number;
+        logoURI?: string;
     };
     tokens?: TokenConfig[];
 }

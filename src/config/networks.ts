@@ -10,6 +10,7 @@ export interface NetworkConfig {
         name: string;
         symbol: string;
         decimals: number;
+        logoURI?: string;
     };
     tokens?: TokenConfig[];
 }
@@ -47,6 +48,7 @@ export const SUBSTRATE_NETWORKS: SubstrateNetworkConfig[] = [
             name: "Selendra",
             symbol: "SEL",
             decimals: 18,
+            logoURI: "https://www.selendra.org/logo/sel-logo-blue-notext.png",
         },
         ss58Format: 42,
         genesisHash:
@@ -100,6 +102,7 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
             name: "Selendra",
             symbol: "SEL",
             decimals: 18,
+            logoURI: "https://www.selendra.org/logo/sel-logo-blue-notext.png",
         },
         tokens: [
             {
@@ -122,6 +125,7 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
             name: "Ethereum",
             symbol: "ETH",
             decimals: 18,
+            logoURI: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=040",
         },
         tokens: [
             {
@@ -129,6 +133,8 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
                 name: "Tether USD",
                 symbol: "USDT",
                 decimals: 6,
+                logoURI:
+                    "https://cryptologos.cc/logos/tether-usdt-logo.svg?v=040",
             },
             {
                 address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -149,6 +155,8 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
             name: "MATIC",
             symbol: "MATIC",
             decimals: 18,
+            logoURI:
+                "https://cryptologos.cc/logos/polygon-matic-logo.svg?v=040",
         },
         tokens: [
             {
@@ -156,6 +164,8 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
                 name: "Tether USD",
                 symbol: "USDT",
                 decimals: 6,
+                logoURI:
+                    "https://cryptologos.cc/logos/tether-usdt-logo.svg?v=040",
             },
         ],
     },
