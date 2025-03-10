@@ -141,6 +141,8 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
                 name: "USD Coin",
                 symbol: "USDC",
                 decimals: 6,
+                logoURI:
+                    "https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=040",
             },
         ],
     },
@@ -166,6 +168,14 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
                 decimals: 6,
                 logoURI:
                     "https://cryptologos.cc/logos/tether-usdt-logo.svg?v=040",
+            },
+            {
+                address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+                name: "USD Coin",
+                symbol: "USDC",
+                decimals: 6,
+                logoURI:
+                    "https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=040",
             },
         ],
     },

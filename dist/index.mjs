@@ -875,7 +875,8 @@ var EVM_NETWORKS = [
         address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
         name: "USD Coin",
         symbol: "USDC",
-        decimals: 6
+        decimals: 6,
+        logoURI: "https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=040"
       }
     ]
   },
@@ -899,6 +900,13 @@ var EVM_NETWORKS = [
         symbol: "USDT",
         decimals: 6,
         logoURI: "https://cryptologos.cc/logos/tether-usdt-logo.svg?v=040"
+      },
+      {
+        address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+        name: "USD Coin",
+        symbol: "USDC",
+        decimals: 6,
+        logoURI: "https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=040"
       }
     ]
   }
