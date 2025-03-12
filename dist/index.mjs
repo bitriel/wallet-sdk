@@ -916,6 +916,62 @@ var SUPPORTED_NETWORKS = [...SUBSTRATE_NETWORKS, ...EVM_NETWORKS];
 // src/wallet/substrate.ts
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { Keyring } from "@polkadot/keyring";
+
+// src/utils/tokenFormatters.ts
+var DEFAULT_FORMAT_OPTIONS = {
+  precision: 5,
+  useThousandSeparator: true,
+  thousandSeparator: ",",
+  trimTrailingZeros: true
+};
+function formatTokenBalance(balance, decimals, options = {}) {
+  const {
+    precision,
+    useThousandSeparator,
+    thousandSeparator,
+    trimTrailingZeros
+  } = { ...DEFAULT_FORMAT_OPTIONS, ...options };
+  try {
+    const balanceBigInt = BigInt(balance);
+    const divisor = BigInt(10) ** BigInt(decimals);
+    let wholePart = (balanceBigInt / divisor).toString();
+    let fractionalPart = (balanceBigInt % divisor).toString().padStart(decimals, "0");
+    if (useThousandSeparator) {
+      wholePart = wholePart.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        thousandSeparator || ","
+      );
+    }
+    if (precision !== void 0 && precision >= 0) {
+      fractionalPart = fractionalPart.slice(0, precision);
+    }
+    if (trimTrailingZeros) {
+      fractionalPart = fractionalPart.replace(/0+$/, "");
+    }
+    return fractionalPart ? `${wholePart}.${fractionalPart}` : wholePart;
+  } catch (error) {
+    console.warn("Failed to format token balance:", error);
+    return balance;
+  }
+}
+function parseTokenBalance(formattedBalance, decimals) {
+  try {
+    const cleanedBalance = formattedBalance.replace(/,/g, "");
+    const [wholePart, fractionalPart = ""] = cleanedBalance.split(/[.,]/);
+    const paddedFractional = fractionalPart.padEnd(decimals, "0");
+    const finalFractional = paddedFractional.slice(0, decimals);
+    return wholePart + finalFractional;
+  } catch (error) {
+    console.warn("Failed to parse token balance:", error);
+    return formattedBalance;
+  }
+}
+function formatTokenAmount(amount, decimals, symbol, options = {}) {
+  const formattedAmount = formatTokenBalance(amount, decimals, options);
+  return `${formattedAmount} ${symbol}`;
+}
+
+// src/wallet/substrate.ts
 var SubstrateWalletProvider = class {
   api = null;
   keyring = null;
@@ -1079,21 +1135,7 @@ var SubstrateWalletProvider = class {
     return tokens;
   }
   formatTokenBalance(balance, decimals, precision = 5) {
-    try {
-      const balanceBigInt = BigInt(balance);
-      const divisor = BigInt(10 ** decimals);
-      const wholePart = (balanceBigInt / divisor).toString();
-      let fractionalPart = (balanceBigInt % divisor).toString().padStart(decimals, "0");
-      fractionalPart = fractionalPart.slice(0, precision);
-      const formattedWhole = wholePart.replace(
-        /\B(?=(\d{3})+(?!\d))/g,
-        ","
-      );
-      return `${formattedWhole}.${fractionalPart}`;
-    } catch (error) {
-      console.warn("Failed to format token balance:", error);
-      return balance;
-    }
+    return formatTokenBalance(balance, decimals, { precision });
   }
   async estimateFee(tx) {
     if (!this.api || !this.pair) {
@@ -1352,21 +1394,7 @@ var EVMWalletProvider = class {
     return tokens;
   }
   formatTokenBalance(balance, decimals, precision = 5) {
-    try {
-      const balanceBigInt = BigInt(balance);
-      const divisor = BigInt(10) ** BigInt(decimals);
-      const wholePart = (balanceBigInt / divisor).toString();
-      let fractionalPart = (balanceBigInt % divisor).toString().padStart(decimals, "0");
-      fractionalPart = fractionalPart.slice(0, precision);
-      const formattedWhole = wholePart.replace(
-        /\B(?=(\d{3})+(?!\d))/g,
-        ","
-      );
-      return `${formattedWhole}.${fractionalPart}`;
-    } catch (error) {
-      console.warn("Failed to format token balance:", error);
-      return balance;
-    }
+    return formatTokenBalance(balance, decimals, { precision });
   }
   isConnected() {
     return this.provider !== null && this.signer !== null;
@@ -1558,17 +1586,32 @@ var BitrielWalletSDK = class {
     }
     return provider.estimateFee(tx);
   }
-  formatTokenBalance(balance, decimals) {
-    try {
-      const balanceBigInt = BigInt(balance);
-      const divisor = BigInt(10 ** decimals);
-      const wholePart = (balanceBigInt / divisor).toString();
-      const fractionalPart = (balanceBigInt % divisor).toString().padStart(decimals, "0");
-      return `${wholePart}.${fractionalPart}`;
-    } catch (error) {
-      console.warn("Failed to format token balance:", error);
-      return balance;
-    }
+  /**
+   * Format a token balance with the specified options
+   * @param balance - The token balance as a string
+   * @param decimals - The number of decimals for the token
+   * @param options - Formatting options
+   */
+  formatTokenBalance(balance, decimals, options) {
+    return formatTokenBalance(balance, decimals, options);
+  }
+  /**
+   * Format a token amount with its symbol
+   * @param amount - The token amount as a string
+   * @param decimals - The number of decimals for the token
+   * @param symbol - The token symbol
+   * @param options - Formatting options
+   */
+  formatTokenAmount(amount, decimals, symbol, options) {
+    return formatTokenAmount(amount, decimals, symbol, options);
+  }
+  /**
+   * Parse a formatted token balance back to its raw form
+   * @param formattedBalance - The formatted balance string
+   * @param decimals - The number of decimals for the token
+   */
+  parseTokenBalance(formattedBalance, decimals) {
+    return parseTokenBalance(formattedBalance, decimals);
   }
 };
 

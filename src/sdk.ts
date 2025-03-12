@@ -10,6 +10,12 @@ import { NetworkConfig, SUPPORTED_NETWORKS } from "./config/networks";
 import { SubstrateWalletProvider } from "./wallet/substrate";
 import { EVMWalletProvider } from "./wallet/evm";
 import { generateMnemonic, MnemonicOptions } from "./utils/mnemonic";
+import {
+    formatTokenBalance,
+    formatTokenAmount,
+    parseTokenBalance,
+    TokenBalanceFormatOptions,
+} from "./utils/tokenFormatters";
 
 export class BitrielWalletSDK {
     private providers: Map<string, WalletProvider> = new Map();
@@ -175,18 +181,42 @@ export class BitrielWalletSDK {
         return provider.estimateFee(tx);
     }
 
-    private formatTokenBalance(balance: string, decimals: number): string {
-        try {
-            const balanceBigInt = BigInt(balance);
-            const divisor = BigInt(10 ** decimals);
-            const wholePart = (balanceBigInt / divisor).toString();
-            const fractionalPart = (balanceBigInt % divisor)
-                .toString()
-                .padStart(decimals, "0");
-            return `${wholePart}.${fractionalPart}`;
-        } catch (error) {
-            console.warn("Failed to format token balance:", error);
-            return balance;
-        }
+    /**
+     * Format a token balance with the specified options
+     * @param balance - The token balance as a string
+     * @param decimals - The number of decimals for the token
+     * @param options - Formatting options
+     */
+    formatTokenBalance(
+        balance: string,
+        decimals: number,
+        options?: TokenBalanceFormatOptions
+    ): string {
+        return formatTokenBalance(balance, decimals, options);
+    }
+
+    /**
+     * Format a token amount with its symbol
+     * @param amount - The token amount as a string
+     * @param decimals - The number of decimals for the token
+     * @param symbol - The token symbol
+     * @param options - Formatting options
+     */
+    formatTokenAmount(
+        amount: string,
+        decimals: number,
+        symbol: string,
+        options?: TokenBalanceFormatOptions
+    ): string {
+        return formatTokenAmount(amount, decimals, symbol, options);
+    }
+
+    /**
+     * Parse a formatted token balance back to its raw form
+     * @param formattedBalance - The formatted balance string
+     * @param decimals - The number of decimals for the token
+     */
+    parseTokenBalance(formattedBalance: string, decimals: number): string {
+        return parseTokenBalance(formattedBalance, decimals);
     }
 }

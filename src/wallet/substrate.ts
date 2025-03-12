@@ -13,6 +13,7 @@ import {
 import { SubstrateNetworkConfig } from "../config/networks";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { SubmittableExtrinsic } from "@polkadot/api/types";
+import { formatTokenBalance } from "../utils/tokenFormatters";
 
 export class SubstrateWalletProvider implements WalletProvider {
     private api: SubstrateApi | null = null;
@@ -214,28 +215,7 @@ export class SubstrateWalletProvider implements WalletProvider {
         decimals: number,
         precision: number = 5
     ): string {
-        try {
-            const balanceBigInt = BigInt(balance);
-            const divisor = BigInt(10 ** decimals);
-            const wholePart = (balanceBigInt / divisor).toString();
-            let fractionalPart = (balanceBigInt % divisor)
-                .toString()
-                .padStart(decimals, "0");
-
-            // Trim fractional part to desired precision
-            fractionalPart = fractionalPart.slice(0, precision);
-
-            // Format whole part with commas
-            const formattedWhole = wholePart.replace(
-                /\B(?=(\d{3})+(?!\d))/g,
-                ","
-            );
-
-            return `${formattedWhole}.${fractionalPart}`;
-        } catch (error) {
-            console.warn("Failed to format token balance:", error);
-            return balance;
-        }
+        return formatTokenBalance(balance, decimals, { precision });
     }
 
     async estimateFee(tx: PolkadotTransactionRequest): Promise<FeeEstimate> {

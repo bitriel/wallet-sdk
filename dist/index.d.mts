@@ -141,6 +141,20 @@ interface MnemonicOptions {
     strength?: 128 | 160 | 192 | 224 | 256;
 }
 
+/**
+ * Options for formatting token balances
+ */
+interface TokenBalanceFormatOptions {
+    /** Number of decimal places to show in the formatted output */
+    precision?: number;
+    /** Whether to add thousand separators (commas) to the whole number part */
+    useThousandSeparator?: boolean;
+    /** Custom thousand separator character */
+    thousandSeparator?: string;
+    /** Whether to trim trailing zeros in the decimal part */
+    trimTrailingZeros?: boolean;
+}
+
 declare class BitrielWalletSDK {
     private providers;
     private currentNetwork;
@@ -157,7 +171,27 @@ declare class BitrielWalletSDK {
     }) | null;
     listTokens(): Promise<TokenInfo[]>;
     estimateFee(tx: TransactionRequest): Promise<FeeEstimate>;
-    private formatTokenBalance;
+    /**
+     * Format a token balance with the specified options
+     * @param balance - The token balance as a string
+     * @param decimals - The number of decimals for the token
+     * @param options - Formatting options
+     */
+    formatTokenBalance(balance: string, decimals: number, options?: TokenBalanceFormatOptions): string;
+    /**
+     * Format a token amount with its symbol
+     * @param amount - The token amount as a string
+     * @param decimals - The number of decimals for the token
+     * @param symbol - The token symbol
+     * @param options - Formatting options
+     */
+    formatTokenAmount(amount: string, decimals: number, symbol: string, options?: TokenBalanceFormatOptions): string;
+    /**
+     * Parse a formatted token balance back to its raw form
+     * @param formattedBalance - The formatted balance string
+     * @param decimals - The number of decimals for the token
+     */
+    parseTokenBalance(formattedBalance: string, decimals: number): string;
 }
 
 declare class SubstrateWalletProvider implements WalletProvider {

@@ -1,6 +1,6 @@
 {
     "name": "bitriel-wallet-sdk",
-    "version": "1.1.12",
+    "version": "1.1.13",
     "description": "This is bitriel Wallet SDK",
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
@@ -15,7 +15,8 @@
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage",
         "test:execute": "ts-node test/wallet-sdk-excecute.test.ts",
-        "test:mnemonic": "ts-node test/mnemonic.test.ts"
+        "test:mnemonic": "ts-node test/mnemonic.test.ts",
+        "test:token-formatters": "ts-node test/tokenFormatters.test.ts"
     },
     "keywords": [
         "bitriel",

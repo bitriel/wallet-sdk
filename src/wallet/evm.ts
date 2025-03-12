@@ -7,6 +7,7 @@ import {
     FeeEstimate,
 } from "./types";
 import { EVMNetworkConfig } from "../config/networks";
+import { formatTokenBalance } from "../utils/tokenFormatters";
 
 export class EVMWalletProvider implements WalletProvider {
     private provider: ethers.Provider | null = null;
@@ -245,28 +246,7 @@ export class EVMWalletProvider implements WalletProvider {
         decimals: number,
         precision: number = 5
     ): string {
-        try {
-            const balanceBigInt = BigInt(balance);
-            const divisor = BigInt(10) ** BigInt(decimals);
-            const wholePart = (balanceBigInt / divisor).toString();
-            let fractionalPart = (balanceBigInt % divisor)
-                .toString()
-                .padStart(decimals, "0");
-
-            // Trim fractional part to the specified precision (5 decimal places)
-            fractionalPart = fractionalPart.slice(0, precision);
-
-            // Format whole part with commas for readability
-            const formattedWhole = wholePart.replace(
-                /\B(?=(\d{3})+(?!\d))/g,
-                ","
-            );
-
-            return `${formattedWhole}.${fractionalPart}`;
-        } catch (error) {
-            console.warn("Failed to format token balance:", error);
-            return balance;
-        }
+        return formatTokenBalance(balance, decimals, { precision });
     }
 
     isConnected(): boolean {
