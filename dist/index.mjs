@@ -1647,6 +1647,9 @@ export {
   SUBSTRATE_NETWORKS,
   SUPPORTED_NETWORKS,
   SubstrateWalletProvider,
+  formatTokenAmount,
+  formatTokenBalance,
   formatTransactionAmount,
+  parseTokenBalance,
   parseTransactionAmount
 };

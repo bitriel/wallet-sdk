@@ -27,7 +27,10 @@ __export(index_exports, {
   SUBSTRATE_NETWORKS: () => SUBSTRATE_NETWORKS,
   SUPPORTED_NETWORKS: () => SUPPORTED_NETWORKS,
   SubstrateWalletProvider: () => SubstrateWalletProvider,
+  formatTokenAmount: () => formatTokenAmount,
+  formatTokenBalance: () => formatTokenBalance,
   formatTransactionAmount: () => formatTransactionAmount,
+  parseTokenBalance: () => parseTokenBalance,
   parseTransactionAmount: () => parseTransactionAmount
 });
 module.exports = __toCommonJS(index_exports);
@@ -1682,6 +1685,9 @@ function formatTransactionAmount(amount, chainType, decimals = 18) {
   SUBSTRATE_NETWORKS,
   SUPPORTED_NETWORKS,
   SubstrateWalletProvider,
+  formatTokenAmount,
+  formatTokenBalance,
   formatTransactionAmount,
+  parseTokenBalance,
   parseTransactionAmount
 });

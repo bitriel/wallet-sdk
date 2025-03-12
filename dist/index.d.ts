@@ -154,6 +154,30 @@ interface TokenBalanceFormatOptions {
     /** Whether to trim trailing zeros in the decimal part */
     trimTrailingZeros?: boolean;
 }
+/**
+ * Formats a token balance string with the specified number of decimal places and formatting options
+ * @param balance - The token balance as a string
+ * @param decimals - The number of decimals for the token
+ * @param options - Formatting options
+ * @returns Formatted balance string
+ */
+declare function formatTokenBalance(balance: string, decimals: number, options?: TokenBalanceFormatOptions): string;
+/**
+ * Parses a formatted token balance string back to its raw form
+ * @param formattedBalance - The formatted balance string
+ * @param decimals - The number of decimals for the token
+ * @returns Raw balance string
+ */
+declare function parseTokenBalance(formattedBalance: string, decimals: number): string;
+/**
+ * Formats a token amount for display with symbol
+ * @param amount - The token amount as a string
+ * @param decimals - The number of decimals for the token
+ * @param symbol - The token symbol
+ * @param options - Formatting options
+ * @returns Formatted amount with symbol
+ */
+declare function formatTokenAmount(amount: string, decimals: number, symbol: string, options?: TokenBalanceFormatOptions): string;
 
 declare class BitrielWalletSDK {
     private providers;
@@ -251,4 +275,4 @@ declare function parseTransactionAmount(amount: string | number | boolean | Uint
  */
 declare function formatTransactionAmount(amount: string, chainType: "substrate" | "evm", decimals?: number): string;
 
-export { BitrielWalletSDK, type EVMNetworkConfig, type EVMTransactionRequest, EVMWalletProvider, EVM_NETWORKS, type FeeEstimate, GENERIC_ABI, type NetworkConfig, type PolkadotTransactionRequest, SUBSTRATE_NETWORKS, SUPPORTED_NETWORKS, type SubstrateAccountInfo, type SubstrateApi, type SubstrateExtrinsic, type SubstrateNetworkConfig, type SubstrateTransactionResult, type SubstrateTxModule, SubstrateWalletProvider, type TokenBalance, type TokenConfig, type TokenInfo, type TransactionRequest, type WalletBalances, type WalletProvider, type WalletState, formatTransactionAmount, parseTransactionAmount };
+export { BitrielWalletSDK, type EVMNetworkConfig, type EVMTransactionRequest, EVMWalletProvider, EVM_NETWORKS, type FeeEstimate, GENERIC_ABI, type NetworkConfig, type PolkadotTransactionRequest, SUBSTRATE_NETWORKS, SUPPORTED_NETWORKS, type SubstrateAccountInfo, type SubstrateApi, type SubstrateExtrinsic, type SubstrateNetworkConfig, type SubstrateTransactionResult, type SubstrateTxModule, SubstrateWalletProvider, type TokenBalance, type TokenBalanceFormatOptions, type TokenConfig, type TokenInfo, type TransactionRequest, type WalletBalances, type WalletProvider, type WalletState, formatTokenAmount, formatTokenBalance, formatTransactionAmount, parseTokenBalance, parseTransactionAmount };

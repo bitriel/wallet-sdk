@@ -220,3 +220,11 @@ export class BitrielWalletSDK {
         return parseTokenBalance(formattedBalance, decimals);
     }
 }
+
+// Export utility types and functions for direct use
+export type { TokenBalanceFormatOptions } from "./utils/tokenFormatters";
+export {
+    formatTokenBalance,
+    formatTokenAmount,
+    parseTokenBalance,
+} from "./utils/tokenFormatters";
