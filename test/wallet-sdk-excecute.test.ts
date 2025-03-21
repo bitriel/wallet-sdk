@@ -38,14 +38,14 @@ async function main() {
 
             // Test transaction
             const recipientAddress =
-                "5DWespGr297iRHFDUijgnbYaxqhTNtesWRLXpJ5xFL8XdLGt";
+                "5FFVzVi2xVs4XgHrRnb1ZW7h5iC1ojScAKvryPVvaXBXcrd9";
             const substrateTx = {
                 method: "balances",
                 params: [
                     "transfer",
                     recipientAddress,
-                    parseTransactionAmount("1", "substrate"),
-                ], // 1 SEL
+                    parseTransactionAmount("0.001", "substrate"),
+                ], // 0.001 SEL
             };
 
             // Estimate fee before sending transaction

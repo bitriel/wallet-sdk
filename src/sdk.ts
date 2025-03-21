@@ -5,6 +5,7 @@ import {
     TokenInfo,
     TransactionRequest,
     FeeEstimate,
+    DetailedBalance,
 } from "./wallet/types";
 import { NetworkConfig, SUPPORTED_NETWORKS } from "./config/networks";
 import { SubstrateWalletProvider } from "./wallet/substrate";
@@ -101,14 +102,79 @@ export class BitrielWalletSDK {
             }
         }
 
+        // Get detailed balance information
+        const detailedBalance = await this.getDetailedBalance();
+
         return {
             address,
             balances: {
                 native: nativeBalance,
                 tokens: tokenBalances,
+                detailed: detailedBalance,
             },
             network: this.currentNetwork,
         };
+    }
+
+    /**
+     * Get detailed balance information including locked and transferable balances
+     * @returns Detailed balance information
+     */
+    async getDetailedBalance(): Promise<DetailedBalance> {
+        if (!this.currentNetwork) {
+            throw new Error("No network connected");
+        }
+
+        const provider = this.providers.get(
+            this.currentNetwork.chainId.toString()
+        );
+        if (!provider) {
+            throw new Error("Provider not found");
+        }
+
+        const totalBalance = await provider.getBalance();
+        const decimals = this.currentNetwork.nativeCurrency.decimals;
+
+        // For Substrate chains, we can get locked balance from the system account
+        if (this.currentNetwork.type === "substrate") {
+            const substrateProvider = provider as SubstrateWalletProvider;
+            const accountInfo = await substrateProvider.getAccountInfo();
+            // Calculate locked and transferable balances
+            const locked = accountInfo.data.frozen.toString();
+            const transferable = (
+                BigInt(totalBalance) - BigInt(locked)
+            ).toString();
+
+            return {
+                total: totalBalance,
+                locked,
+                transferable,
+                formatted: {
+                    total: this.formatTokenBalance(totalBalance, decimals),
+                    locked: this.formatTokenBalance(locked, decimals),
+                    transferable: this.formatTokenBalance(
+                        transferable,
+                        decimals
+                    ),
+                },
+            };
+        } else {
+            // For EVM chains, we don't have locked balances by default
+            // This could be extended to support specific EVM chains that implement locking
+            return {
+                total: totalBalance,
+                locked: "0",
+                transferable: totalBalance,
+                formatted: {
+                    total: this.formatTokenBalance(totalBalance, decimals),
+                    locked: "0.0",
+                    transferable: this.formatTokenBalance(
+                        totalBalance,
+                        decimals
+                    ),
+                },
+            };
+        }
     }
 
     async sendTransaction(tx: TransactionRequest): Promise<string> {

@@ -86,6 +86,19 @@ export class SubstrateWalletProvider implements WalletProvider {
         return accountInfo.data.free.toString();
     }
 
+    /**
+     * Get detailed account information including locked balance
+     * @returns Account information
+     */
+    async getAccountInfo(): Promise<SubstrateAccountInfo> {
+        if (!this.api || !this.pair) {
+            throw new Error("Wallet not connected");
+        }
+        return (await this.api.query.system.account(
+            this.pair.address
+        )) as SubstrateAccountInfo;
+    }
+
     async sendTransaction(tx: PolkadotTransactionRequest): Promise<string> {
         if (!this.api || !this.pair) {
             throw new Error("Wallet not connected");

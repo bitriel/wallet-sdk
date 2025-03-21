@@ -42,9 +42,21 @@ export interface TokenBalance {
     formatted: string;
 }
 
+export interface DetailedBalance {
+    total: string;
+    locked: string;
+    transferable: string;
+    formatted: {
+        total: string;
+        locked: string;
+        transferable: string;
+    };
+}
+
 export interface WalletBalances {
     native: string;
     tokens: TokenBalance[];
+    detailed?: DetailedBalance;
 }
 
 export interface WalletState {
@@ -87,6 +99,9 @@ export interface SubstrateTransactionResult {
 export interface SubstrateAccountInfo {
     data: {
         free: {
+            toString: () => string;
+        };
+        frozen: {
             toString: () => string;
         };
     };
