@@ -79,9 +79,20 @@ interface TokenBalance {
     balance: string;
     formatted: string;
 }
+interface DetailedBalance {
+    total: string;
+    locked: string;
+    transferable: string;
+    formatted: {
+        total: string;
+        locked: string;
+        transferable: string;
+    };
+}
 interface WalletBalances {
     native: string;
     tokens: TokenBalance[];
+    detailed?: DetailedBalance;
 }
 interface WalletState {
     address: string;
@@ -114,6 +125,9 @@ interface SubstrateTransactionResult {
 interface SubstrateAccountInfo {
     data: {
         free: {
+            toString: () => string;
+        };
+        frozen: {
             toString: () => string;
         };
     };
@@ -187,6 +201,11 @@ declare class BitrielWalletSDK {
     connect(chainId: string): Promise<void>;
     disconnect(): Promise<void>;
     getWalletState(): Promise<WalletState>;
+    /**
+     * Get detailed balance information including locked and transferable balances
+     * @returns Detailed balance information
+     */
+    getDetailedBalance(): Promise<DetailedBalance>;
     sendTransaction(tx: TransactionRequest): Promise<string>;
     signMessage(message: string): Promise<string>;
     getSupportedNetworks(): NetworkConfig[];
@@ -230,6 +249,11 @@ declare class SubstrateWalletProvider implements WalletProvider {
     getAddress(): Promise<string>;
     signMessage(message: string): Promise<string>;
     getBalance(): Promise<string>;
+    /**
+     * Get detailed account information including locked balance
+     * @returns Account information
+     */
+    getAccountInfo(): Promise<SubstrateAccountInfo>;
     sendTransaction(tx: PolkadotTransactionRequest): Promise<string>;
     getTokenBalance(tokenAddress: string): Promise<string>;
     listTokens(): Promise<TokenInfo[]>;
@@ -266,13 +290,5 @@ declare class EVMWalletProvider implements WalletProvider {
  * @returns The amount in base units as string
  */
 declare function parseTransactionAmount(amount: string | number | boolean | Uint8Array<ArrayBufferLike> | null, chainType: "substrate" | "evm", decimals?: number): string;
-/**
- * Formats amount for both Substrate and EVM chains
- * @param amount The amount in base units (as string)
- * @param chainType The type of chain ('substrate' or 'evm')
- * @param decimals Number of decimal places (default: 18)
- * @returns The human-readable amount as string
- */
-declare function formatTransactionAmount(amount: string, chainType: "substrate" | "evm", decimals?: number): string;
 
-export { BitrielWalletSDK, type EVMNetworkConfig, type EVMTransactionRequest, EVMWalletProvider, EVM_NETWORKS, type FeeEstimate, GENERIC_ABI, type NetworkConfig, type PolkadotTransactionRequest, SUBSTRATE_NETWORKS, SUPPORTED_NETWORKS, type SubstrateAccountInfo, type SubstrateApi, type SubstrateExtrinsic, type SubstrateNetworkConfig, type SubstrateTransactionResult, type SubstrateTxModule, SubstrateWalletProvider, type TokenBalance, type TokenBalanceFormatOptions, type TokenConfig, type TokenInfo, type TransactionRequest, type WalletBalances, type WalletProvider, type WalletState, formatTokenAmount, formatTokenBalance, formatTransactionAmount, parseTokenBalance, parseTransactionAmount };
+export { BitrielWalletSDK, type DetailedBalance, type EVMNetworkConfig, type EVMTransactionRequest, EVMWalletProvider, EVM_NETWORKS, type FeeEstimate, GENERIC_ABI, type NetworkConfig, type PolkadotTransactionRequest, SUBSTRATE_NETWORKS, SUPPORTED_NETWORKS, type SubstrateAccountInfo, type SubstrateApi, type SubstrateExtrinsic, type SubstrateNetworkConfig, type SubstrateTransactionResult, type SubstrateTxModule, SubstrateWalletProvider, type TokenBalance, type TokenBalanceFormatOptions, type TokenConfig, type TokenInfo, type TransactionRequest, type WalletBalances, type WalletProvider, type WalletState, formatTokenAmount, formatTokenBalance, parseTokenBalance, parseTransactionAmount };

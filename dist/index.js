@@ -29,7 +29,6 @@ __export(index_exports, {
   SubstrateWalletProvider: () => SubstrateWalletProvider,
   formatTokenAmount: () => formatTokenAmount,
   formatTokenBalance: () => formatTokenBalance,
-  formatTransactionAmount: () => formatTransactionAmount,
   parseTokenBalance: () => parseTokenBalance,
   parseTransactionAmount: () => parseTransactionAmount
 });
@@ -1070,6 +1069,18 @@ var SubstrateWalletProvider = class {
     );
     return accountInfo.data.free.toString();
   }
+  /**
+   * Get detailed account information including locked balance
+   * @returns Account information
+   */
+  async getAccountInfo() {
+    if (!this.api || !this.pair) {
+      throw new Error("Wallet not connected");
+    }
+    return await this.api.query.system.account(
+      this.pair.address
+    );
+  }
   async sendTransaction(tx) {
     if (!this.api || !this.pair) {
       throw new Error("Wallet not connected");
@@ -1560,14 +1571,66 @@ var BitrielWalletSDK = class {
         });
       }
     }
+    const detailedBalance = await this.getDetailedBalance();
     return {
       address,
       balances: {
         native: nativeBalance,
-        tokens: tokenBalances
+        tokens: tokenBalances,
+        detailed: detailedBalance
       },
       network: this.currentNetwork
     };
+  }
+  /**
+   * Get detailed balance information including locked and transferable balances
+   * @returns Detailed balance information
+   */
+  async getDetailedBalance() {
+    if (!this.currentNetwork) {
+      throw new Error("No network connected");
+    }
+    const provider = this.providers.get(
+      this.currentNetwork.chainId.toString()
+    );
+    if (!provider) {
+      throw new Error("Provider not found");
+    }
+    const totalBalance = await provider.getBalance();
+    const decimals = this.currentNetwork.nativeCurrency.decimals;
+    if (this.currentNetwork.type === "substrate") {
+      const substrateProvider = provider;
+      const accountInfo = await substrateProvider.getAccountInfo();
+      const locked = accountInfo.data.frozen.toString();
+      const transferable = (BigInt(totalBalance) - BigInt(locked)).toString();
+      return {
+        total: totalBalance,
+        locked,
+        transferable,
+        formatted: {
+          total: this.formatTokenBalance(totalBalance, decimals),
+          locked: this.formatTokenBalance(locked, decimals),
+          transferable: this.formatTokenBalance(
+            transferable,
+            decimals
+          )
+        }
+      };
+    } else {
+      return {
+        total: totalBalance,
+        locked: "0",
+        transferable: totalBalance,
+        formatted: {
+          total: this.formatTokenBalance(totalBalance, decimals),
+          locked: "0.0",
+          transferable: this.formatTokenBalance(
+            totalBalance,
+            decimals
+          )
+        }
+      };
+    }
   }
   async sendTransaction(tx) {
     if (!this.currentNetwork) {
@@ -1662,18 +1725,11 @@ function parseTransactionAmount(amount, chainType, decimals = 18) {
   if (chainType === "evm") {
     return import_ethers2.ethers.parseEther(amount.toString()).toString();
   } else {
-    return new import_util.BN(amount.toString()).mul(new import_util.BN(10).pow(new import_util.BN(decimals))).toString();
-  }
-}
-function formatTransactionAmount(amount, chainType, decimals = 18) {
-  if (chainType === "evm") {
-    return import_ethers2.ethers.formatEther(amount);
-  } else {
-    const bn = new import_util.BN(amount);
-    const divisor = new import_util.BN(10).pow(new import_util.BN(decimals));
-    const whole = bn.div(divisor).toString();
-    const fraction = bn.mod(divisor).toString().padStart(decimals, "0");
-    return `${whole}.${fraction}`;
+    const amountStr = amount.toString();
+    const [whole, fraction = ""] = amountStr.split(".");
+    const paddedFraction = fraction.padEnd(decimals, "0").slice(0, decimals);
+    const fullNumber = whole + paddedFraction;
+    return new import_util.BN(fullNumber).toString();
   }
 }
 // Annotate the CommonJS export names for ESM import in node:
@@ -1687,7 +1743,6 @@ function formatTransactionAmount(amount, chainType, decimals = 18) {
   SubstrateWalletProvider,
   formatTokenAmount,
   formatTokenBalance,
-  formatTransactionAmount,
   parseTokenBalance,
   parseTransactionAmount
 });
