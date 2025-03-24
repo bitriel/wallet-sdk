@@ -106,11 +106,18 @@ export const EVM_NETWORKS: EVMNetworkConfig[] = [
         },
         tokens: [
             {
-                address: "0xB2214719304573561Ad8c432b2faFFCd44287190",
+                address: "0x2402Ed00D1223500bA3B45fa30549Be28Dbe50B3",
                 name: "SAM Token",
                 symbol: "SAM",
                 decimals: 18,
                 logoURI: "https://selendra.org/tokens/sam.png",
+            },
+            {
+                address: "0xffFEdB07dbc5A93A3c7653930e46Bd9332468559",
+                name: "KHR Stable",
+                symbol: "KHR",
+                decimals: 18,
+                logoURI: "https://selendra.org/tokens/khr.png",
             },
         ],
     },
